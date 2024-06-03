@@ -26,7 +26,7 @@ class FeatureCommand extends Command<int> {
     // 1. Get Variables from the Brick
     final featureName = _logger.prompt(
       '$gQ What is your feature name?',
-      defaultValue: 'Fegno Project',
+      defaultValue: 'Dashboard',
     );
 
     final updateProgress = _logger.progress('Generating $featureName');
