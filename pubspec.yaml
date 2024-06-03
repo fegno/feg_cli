@@ -9,7 +9,9 @@ environment:
 dependencies:
   args: ^2.4.1
   cli_completion: ^0.3.0
+  mason: ^0.1.0-dev.53
   mason_logger: ^0.2.5
+  path: ^1.9.0
   pub_updater: ^0.3.1
 
 dev_dependencies:
