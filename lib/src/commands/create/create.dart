@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:feg_cli/src/commands/commands.dart';
+import 'package:feg_cli/src/commands/create/commands/commands.dart';
 import 'package:mason_logger/mason_logger.dart';
 
 /// {@template sample_command}
@@ -12,9 +12,13 @@ class CreateCommand extends Command<int> {
   CreateCommand({
     required Logger logger,
   }) {
-    // very_good create flutter_app <args>
     addSubcommand(
       AppCommand(
+        logger: logger,
+      ),
+    );
+    addSubcommand(
+      FeatureCommand(
         logger: logger,
       ),
     );

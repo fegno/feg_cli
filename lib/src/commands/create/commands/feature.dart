@@ -7,46 +7,42 @@ import 'package:mason/mason.dart'; // Add Mason import
 /// {@template update_command}
 /// A command which updates the CLI.W
 /// {@endtemplate}
-class AppCommand extends Command<int> {
+class FeatureCommand extends Command<int> {
   /// {@macro update_command}
-  AppCommand({
+  FeatureCommand({
     required Logger logger,
   }) : _logger = logger;
 
   final Logger _logger;
 
   @override
-  String get name => 'app';
+  String get name => 'feature';
 
   @override
-  String get description => 'Generate a Flutter application.';
+  String get description => 'Generate a feature for Flutter application.';
 
   @override
   Future<int> run() async {
     // 1. Get Variables from the Brick
-    final projectName = _logger.prompt(
-      '$gQ What is project name?',
+    final featureName = _logger.prompt(
+      '$gQ What is your feature name?',
       defaultValue: 'Fegno Project',
     );
-    final projectType = _logger.chooseOne(
-      '$gQ Select project type?',
-      choices: projectTypes.keys.toList(),
-      defaultValue: projectTypes.keys.first,
-    );
-    final updateProgress = _logger.progress('Generating $projectName');
+
+    final updateProgress = _logger.progress('Generating $featureName');
     final brick = Brick.git(
-      GitPath(
+      const GitPath(
         'https://github.com/fegno/Templates.Flutter.git',
-        path: 'projects/${projectTypes[projectType]}',
+        path: 'bricks/feature',
       ),
     );
     final generator = await MasonGenerator.fromBrick(brick);
     final target = DirectoryGeneratorTarget(Directory.current);
     await generator.generate(
       target,
-      vars: <String, dynamic>{'name': projectName},
+      vars: <String, dynamic>{'feature': featureName},
     );
-    updateProgress.complete('Generated $projectName');
+    updateProgress.complete('Generated $featureName');
     return ExitCode.success.code;
   }
 }
