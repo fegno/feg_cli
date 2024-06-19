@@ -27,6 +27,11 @@ class AppCommand extends Command<int> {
     final projectName = _logger.prompt(
       '$gQ What is project name?',
       defaultValue: 'Fegno Project',
+    ); 
+
+    final orgName = _logger.prompt(
+      '$gQ What is organization name?',
+      defaultValue: 'Fegno',
     );
     final projectType = _logger.chooseOne(
       '$gQ Select project type?',
@@ -44,7 +49,7 @@ class AppCommand extends Command<int> {
     final target = DirectoryGeneratorTarget(Directory.current);
     await generator.generate(
       target,
-      vars: <String, dynamic>{'name': projectName},
+      vars: <String, dynamic>{ 'name': projectName,'org':orgName },
     );
     updateProgress.complete('Generated $projectName');
     return ExitCode.success.code;
