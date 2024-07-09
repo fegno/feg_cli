@@ -1,7 +1,13 @@
 name: feg_cli
-description: A Very Good Project created by Very Good CLI.
+description: A CLI for generate flutter templates
 version: 0.0.1
-publish_to: none
+repository: https://github.com/fegno/feg_cli
+
+topics:
+  - cli
+  - code generate
+  - code generation
+  - flutter
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
