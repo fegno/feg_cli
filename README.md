@@ -5,7 +5,7 @@
 
 A Command-Line Interface for Generate Flutter Templates.
 
-Developed by [Fegno Technogies LLP][fegno_technogies_llp_link] 🦄
+Developed by [Fegno Technogies LLP][fegno_technogies_llp_link]
 
 ---
 
