@@ -5,3 +5,7 @@ const projectTypes = {
   'E Commerce': 'e_commerce',
   'Social Media': 'social_media',
 };
+const appNamePlatformTypes = [
+  'Android',
+  'IOS',
+];

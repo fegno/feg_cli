@@ -41,6 +41,7 @@ class FegCliCommandRunner extends CompletionCommandRunner<int> {
 
     // Add sub commands
     addCommand(CreateCommand(logger: _logger));
+    addCommand(ChangeCommand(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
@@ -116,10 +117,11 @@ class FegCliCommandRunner extends CompletionCommandRunner<int> {
       exitCode = await super.runCommand(topLevelResults);
     }
 
-    // Check for updates
-    if (topLevelResults.command?.name != UpdateCommand.commandName) {
-      await _checkForUpdates();
-    }
+    ///TODO
+    // // Check for updates
+    // if (topLevelResults.command?.name != UpdateCommand.commandName) {
+    //   await _checkForUpdates();
+    // }
 
     return exitCode;
   }
