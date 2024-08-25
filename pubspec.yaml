@@ -18,6 +18,8 @@ dependencies:
   #*Mono repos
   app_name_changer:
     path: packages/app_name_changer
+  app_package_name_changer:
+    path: packages/app_package_name_changer
 
 dev_dependencies:
   build_runner: ^2.4.4
