@@ -18,7 +18,7 @@ class ChangeCommand extends Command<int> {
       ),
     );
     addSubcommand(
-      BundleIdCommand(
+      PackageNameCommand(
         logger: logger,
       ),
     );

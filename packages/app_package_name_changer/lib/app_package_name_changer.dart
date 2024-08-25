@@ -6,14 +6,14 @@ import 'ios_rename_steps.dart';
 class ChangeAppPackageName {
   static Future<void> changeAppPackage(String packageName) async {
     try {
-      await android(packageName);
-      await ios(packageName);
+      await changeAndroid(packageName);
+      await changeIos(packageName);
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<void> android(String packageName) async {
+  static Future<void> changeAndroid(String packageName) async {
     if (packageName.isEmpty) {
       throw Exception('Please enter package name');
     } else {
@@ -21,7 +21,7 @@ class ChangeAppPackageName {
     }
   }
 
-  static Future<void> ios(String packageName) async {
+  static Future<void> changeIos(String packageName) async {
     if (packageName.isEmpty) {
       throw Exception('Please enter package name');
     } else {

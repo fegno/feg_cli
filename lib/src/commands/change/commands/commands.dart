@@ -1,2 +1,2 @@
-export 'bundle_id.dart';
+export 'package_name.dart';
 export 'app_name.dart';
