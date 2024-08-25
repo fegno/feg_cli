@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_name_changer/app_name_changer.dart';
 import 'package:args/command_runner.dart';
 import 'package:feg_cli/src/constants.dart';
@@ -37,14 +39,24 @@ class AppNameCommand extends Command<int> {
       return ExitCode.cantCreate.code;
     }
     final updateProgress = _logger.progress('Changing name to $projectName');
-    if (appNamePlatforms.length == 1 && appNamePlatforms.first == 'Android') {
-      await AppNameChanger.changeAndroidAppName(projectName);
-    } else if (appNamePlatforms.length == 1 && appNamePlatforms.first == 'IOS') {
-      await AppNameChanger.changeIosAppName(projectName);
-    } else {
-      await AppNameChanger.changeAppName(projectName);
+    try {
+      if (appNamePlatforms.length == 1 && appNamePlatforms.first == 'Android') {
+        await AppNameChanger.changeAndroidAppName(projectName);
+      } else if (appNamePlatforms.length == 1 && appNamePlatforms.first == 'IOS') {
+        await AppNameChanger.changeIosAppName(projectName);
+      } else {
+        await AppNameChanger.changeAppName(projectName);
+      }
+      updateProgress.complete('Generated $projectName');
+      return ExitCode.success.code;
+    } catch (e) {
+      updateProgress.complete('Generated $projectName');
+      var error = 'Something went wrong! Please try again later ';
+      if (e is PathNotFoundException) {
+        error = "Can't find path";
+      }
+      _logger.err(error);
+      return ExitCode.cantCreate.code;
     }
-    updateProgress.complete('Generated $projectName');
-    return ExitCode.success.code;
   }
 }
