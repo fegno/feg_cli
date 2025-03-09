@@ -1,0 +1,934 @@
+{
+	"info": {
+		"_postman_id": "16d1dcfd-c4d2-4555-82f6-e74663c27153",
+		"name": "marketplace",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42883510",
+		"_collection_link": "https://speeding-spaceship-406157.postman.co/workspace/Team-Workspace~a0ca84b4-e55d-436f-8b95-ad6427bbe6a4/collection/42883510-16d1dcfd-c4d2-4555-82f6-e74663c27153?action=share&source=collection_link&creator=42883510"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "sentOtp",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"otp\", jsonData.otp);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "{{phone}}",
+									"type": "text"
+								},
+								{
+									"key": "otp_type",
+									"value": "{{otp_type}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}auth/verification/mobile/?username=+919961032611",
+							"host": [
+								"{{LOCALHOST}}auth"
+							],
+							"path": [
+								"verification",
+								"mobile",
+								""
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "+919961032611"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "sentOtp",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "otp_type",
+											"value": "{{otp_type}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{LOCALHOST}}auth/verification/mobile/",
+									"host": [
+										"{{LOCALHOST}}auth"
+									],
+									"path": [
+										"verification",
+										"mobile",
+										""
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "+919961032611",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:11:31 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "14"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"otp\": \"8519\"\n}"
+						}
+					]
+				},
+				{
+					"name": "verifyOtp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON",
+									"const response = pm.response.json();",
+									"console.log(response)",
+									"// Check if the response contains tokens",
+									"if (response.access && response.refresh) {",
+									"    // Set tokens in the environment",
+									"    pm.environment.set(\"access_token\", response.access);",
+									"    pm.environment.set(\"refresh_token\", response.refresh);",
+									"    ",
+									"    // Optionally log tokens to the console for debugging",
+									"    console.log(\"Access Token:\", response.access);",
+									"    console.log(\"Refresh Token:\", response.refresh);",
+									"} else {",
+									"    console.error(\"Tokens not found in the response\");",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "otp",
+									"value": "{{otp}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{phone}}",
+									"type": "text"
+								},
+								{
+									"key": "otp_type",
+									"value": "{{otp_type}}",
+									"description": "    MANUFACTURE = 1\n    RETAILER = 2\n    WHOLESALER = 3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}auth/verification/mobile/confirm/",
+							"host": [
+								"{{LOCALHOST}}auth"
+							],
+							"path": [
+								"verification",
+								"mobile",
+								"confirm",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "verifyOtp",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "otp",
+											"value": "{{otp}}",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{phone}}",
+											"type": "text"
+										},
+										{
+											"key": "otp_type",
+											"value": "{{otp_type}}",
+											"description": "    MANUFACTURE = 1\n    RETAILER = 2\n    WHOLESALER = 3",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{LOCALHOST}}auth/verification/mobile/confirm/",
+									"host": [
+										"{{LOCALHOST}}auth"
+									],
+									"path": [
+										"verification",
+										"mobile",
+										"confirm",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:11:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1583"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "csrftoken=GSxq53kSpk6PdiymiEokVU0i2BNHjoAo; expires=Thu, 05 Mar 2026 08:11:38 GMT; Max-Age=31449600; Path=/; SameSite=Lax"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "sessionid=uclx0j9a50t1w0ludna5v6ot86utnca9; expires=Thu, 20 Mar 2025 08:11:38 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"last_login\": \"2025-03-06T08:11:38.576452Z\",\n    \"username\": \"bb6bf6b1-46ba-4854-8588-b9f3d4d0ecc9\",\n    \"first_name\": \"Salah\",\n    \"last_name\": \"Cv\",\n    \"get_full_name\": \"Salah Cv\",\n    \"email\": \"salah@gmail.com\",\n    \"is_staff\": false,\n    \"is_active\": true,\n    \"mobile_no\": \"+918590811546\",\n    \"profile_image\": null,\n    \"modules\": [],\n    \"get_role_display\": \"Vendor\",\n    \"is_vendor\": true,\n    \"is_customer\": false,\n    \"id\": 236,\n    \"role\": 3,\n    \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxODUzNDk4LCJpYXQiOjE3NDEyNDg2OTgsImp0aSI6ImJlNmIzNWRmZDE1ZTRmZDI4NTczMTBhNDdjMDM3NWIxIiwidXNlcl9pZCI6MjM2LCJoYXNoX3Bhc3N3b3JkIjoiRDQxRDhDRDk4RjAwQjIwNEU5ODAwOTk4RUNGODQyN0UiLCJwbGF0Zm9ybSI6InN5c3RlbSIsImlzcyI6Im1rcCJ9.hej59WKJaLdJXvxzCDojrt9fYUIHHuk78gEoYaP_OeU\",\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Mzg0MDY5OCwiaWF0IjoxNzQxMjQ4Njk4LCJqdGkiOiJjM2ExM2YzNmY2ZjU0ZDA4OGJlMjE2YjVlYjQ0ZDZjYiIsInVzZXJfaWQiOjIzNiwiaGFzaF9wYXNzd29yZCI6IkQ0MUQ4Q0Q5OEYwMEIyMDRFOTgwMDk5OEVDRjg0MjdFIiwicGxhdGZvcm0iOiJzeXN0ZW0iLCJpc3MiOiJta3AifQ.DLCJvES4-qH498FozOmddZJxyiTZFchCCQuJaU6msvI\",\n    \"vendor\": {\n        \"id\": 79,\n        \"shop_name\": \"Salah Store\",\n        \"vendor_role\": 3,\n        \"gstn_number\": \"\",\n        \"date_of_establishment\": null,\n        \"business_logo\": null,\n        \"customer_care_number\": null,\n        \"landline_number\": null,\n        \"manufacturing_items\": null,\n        \"proprietor_first_name\": null,\n        \"proprietor_last_name\": null,\n        \"bank_details\": null,\n        \"last_step\": 1,\n        \"addresses\": [],\n        \"is_manufacture\": false,\n        \"is_retailer\": false,\n        \"is_wholesaler\": true,\n        \"documents\": [],\n        \"partner_request\": null,\n        \"latitude\": null,\n        \"longitude\": null,\n        \"total_delivery_distance\": 100,\n        \"free_delivery_distance\": 100\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "address",
+			"item": [
+				{
+					"name": "createAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"label\": \" Office \",\n    \"first_name\": \"salahu cv\",\n    \"last_name\": \"Cena\",\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"line3\": \"Near City Parks\",\n    \"line4\": \"Block C\",\n    \"state\": \"California\",\n    \"postcode\": \"73001\",\n    \"country\": \"US\",\n    \"latitude\": -14.0522,\n    \"longitude\": -118.2437,\n    \"phone_number\": {{phone}},\n    \"notes\": \"Leave at the front doors.\",\n    \"is_default_for_shipping\": true,\n    \"is_default_for_billing\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}address/",
+							"host": [
+								"{{LOCALHOST}}address"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"label\": \" Office \",\n    \"first_name\": \"salahu cv\",\n    \"last_name\": \"Cena\",\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"line3\": \"Near City Parks\",\n    \"line4\": \"Block C\",\n    \"state\": \"California\",\n    \"postcode\": \"73001\",\n    \"country\": \"US\",\n    \"latitude\": -14.0522,\n    \"longitude\": -118.2437,\n    \"phone_number\": {{phone}},\n    \"notes\": \"Leave at the front doors.\",\n    \"is_default_for_shipping\": true,\n    \"is_default_for_billing\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST}}address/",
+									"host": [
+										"{{LOCALHOST}}address"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:11:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "522"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Location",
+									"value": "http://marketplace.dn.fegno.com/api/v1/address/32/"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 32,\n    \"label\": \"office\",\n    \"first_name\": \"salahu cv\",\n    \"last_name\": \"Cena\",\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"line3\": \"Near City Parks\",\n    \"line4\": \"Block C\",\n    \"state\": \"California\",\n    \"postcode\": \"73001\",\n    \"country\": \"US\",\n    \"latitude\": -14.0522,\n    \"longitude\": -118.2437,\n    \"phone_number\": \"+918590811546\",\n    \"notes\": \"Leave at the front doors.\",\n    \"user\": 236,\n    \"is_default_for_shipping\": true,\n    \"is_default_for_billing\": false,\n    \"num_orders_as_shipping_address\": 0,\n    \"num_orders_as_billing_address\": 0,\n    \"url\": \"http://marketplace.dn.fegno.com/api/v1/address/32/\"\n}"
+						}
+					]
+				},
+				{
+					"name": "fetchOneAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST}}address/32/",
+							"host": [
+								"{{LOCALHOST}}address"
+							],
+							"path": [
+								"32",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "fetchOneAddress",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST}}address/32/",
+									"host": [
+										"{{LOCALHOST}}address"
+									],
+									"path": [
+										"32",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:11:20 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "523"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 32,\n    \"label\": \"office\",\n    \"first_name\": \"salahu cv\",\n    \"last_name\": \"Cena\",\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"line3\": \"Near City Parks\",\n    \"line4\": \"Block C\",\n    \"state\": \"California\",\n    \"postcode\": \"73001\",\n    \"country\": \"US\",\n    \"latitude\": -14.0522,\n    \"longitude\": -118.2437,\n    \"phone_number\": \"+918590811546\",\n    \"notes\": \"Leave at the front doors.\",\n    \"user\": 236,\n    \"is_default_for_shipping\": false,\n    \"is_default_for_billing\": false,\n    \"num_orders_as_shipping_address\": 0,\n    \"num_orders_as_billing_address\": 0,\n    \"url\": \"http://marketplace.dn.fegno.com/api/v1/address/32/\"\n}"
+						}
+					]
+				},
+				{
+					"name": "updateOneAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"salahu\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}address/32/",
+							"host": [
+								"{{LOCALHOST}}address"
+							],
+							"path": [
+								"32",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "updateOneAddress",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"first_name\": \"salahu\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST}}address/32/",
+									"host": [
+										"{{LOCALHOST}}address"
+									],
+									"path": [
+										"32",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:11:56 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "520"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 32,\n    \"label\": \"office\",\n    \"first_name\": \"salahu\",\n    \"last_name\": \"Cena\",\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"line3\": \"Near City Parks\",\n    \"line4\": \"Block C\",\n    \"state\": \"California\",\n    \"postcode\": \"73001\",\n    \"country\": \"US\",\n    \"latitude\": -14.0522,\n    \"longitude\": -118.2437,\n    \"phone_number\": \"+918590811546\",\n    \"notes\": \"Leave at the front doors.\",\n    \"user\": 236,\n    \"is_default_for_shipping\": false,\n    \"is_default_for_billing\": false,\n    \"num_orders_as_shipping_address\": 0,\n    \"num_orders_as_billing_address\": 0,\n    \"url\": \"http://marketplace.dn.fegno.com/api/v1/address/32/\"\n}"
+						}
+					]
+				},
+				{
+					"name": "fetchAddresses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST}}address/?is_default_for_shipping=false",
+							"host": [
+								"{{LOCALHOST}}address"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "is_default_for_shipping",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "fetchAddresses",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCALHOST}}address/?is_default_for_shipping=false",
+									"host": [
+										"{{LOCALHOST}}address"
+									],
+									"path": [
+										""
+									],
+									"query": [
+										{
+											"key": "is_default_for_shipping",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:12:06 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "572"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 1,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 32,\n            \"label\": \"office\",\n            \"first_name\": \"salahu\",\n            \"last_name\": \"Cena\",\n            \"line1\": \"123 Main Street\",\n            \"line2\": \"Apt 4B\",\n            \"line3\": \"Near City Parks\",\n            \"line4\": \"Block C\",\n            \"state\": \"California\",\n            \"postcode\": \"73001\",\n            \"country\": \"US\",\n            \"latitude\": -14.0522,\n            \"longitude\": -118.2437,\n            \"phone_number\": \"+918590811546\",\n            \"notes\": \"Leave at the front doors.\",\n            \"user\": 236,\n            \"is_default_for_shipping\": false,\n            \"is_default_for_billing\": false,\n            \"num_orders_as_shipping_address\": 0,\n            \"num_orders_as_billing_address\": 0,\n            \"url\": \"http://marketplace.dn.fegno.com/api/v1/address/32/\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "deleteOneAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALHOST}}address/31/",
+							"host": [
+								"{{LOCALHOST}}address"
+							],
+							"path": [
+								"31",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "makeDefaultAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_default_for_shipping\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALHOST}}address/32/",
+							"host": [
+								"{{LOCALHOST}}address"
+							],
+							"path": [
+								"32",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "makeDefaultAddress",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"is_default_for_shipping\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCALHOST}}address/32/",
+									"host": [
+										"{{LOCALHOST}}address"
+									],
+									"path": [
+										"32",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.24.0 (Ubuntu)"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 08:12:29 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "520"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Cookie, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 32,\n    \"label\": \"office\",\n    \"first_name\": \"salahu\",\n    \"last_name\": \"Cena\",\n    \"line1\": \"123 Main Street\",\n    \"line2\": \"Apt 4B\",\n    \"line3\": \"Near City Parks\",\n    \"line4\": \"Block C\",\n    \"state\": \"California\",\n    \"postcode\": \"73001\",\n    \"country\": \"US\",\n    \"latitude\": -14.0522,\n    \"longitude\": -118.2437,\n    \"phone_number\": \"+918590811546\",\n    \"notes\": \"Leave at the front doors.\",\n    \"user\": 236,\n    \"is_default_for_shipping\": false,\n    \"is_default_for_billing\": false,\n    \"num_orders_as_shipping_address\": 0,\n    \"num_orders_as_billing_address\": 0,\n    \"url\": \"http://marketplace.dn.fegno.com/api/v1/address/32/\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

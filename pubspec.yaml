@@ -1,6 +1,6 @@
 name: feg_cli
 description: A CLI for generate flutter templates
-version: 0.0.1-dev.3
+version: 0.0.1-dev.4
 repository: https://github.com/fegno/feg_cli
 topics: [cli, codegen, test, template, boilerplate]
 publish_to: none
@@ -12,14 +12,21 @@ dependencies:
   args: ^2.4.1
   cli_completion: ^0.5.0
   mason: ^0.1.0-dev.57
-  mason_logger: ^0.2.5
+  mason_logger: ^0.3.3
   path: ^1.9.0
-  pub_updater: ^0.4.0
+  pub_updater: ^0.5.0
   #*Mono repos
   app_name_changer:
     path: packages/app_name_changer
   app_package_name_changer:
     path: packages/app_package_name_changer
+
+  #* Code Generation
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+
+dependency_overrides:
+  built_value: ^8.9.5
 
 dev_dependencies:
   build_runner: ^2.4.4
@@ -27,7 +34,11 @@ dev_dependencies:
   build_version: ^2.1.1
   mocktail: ^1.0.0
   test: ^1.24.6
-  very_good_analysis: ^6.0.0
+  very_good_analysis: ^7.0.0
+
+  #*Code Generation
+  freezed: ^3.0.3
+  json_serializable: ^6.9.4
 
 executables:
   feg_cli:
