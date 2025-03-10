@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_annotation_target
+// ignore_for_file: invalid_annotation_target, constant_identifier_names, join_return_with_assignment
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -6,7 +6,7 @@ part 'postman_collection_model.freezed.dart';
 part 'postman_collection_model.g.dart';
 
 @freezed
-class PostmanCollectionEntity with _$PostmanCollectionEntity {
+abstract class PostmanCollectionEntity with _$PostmanCollectionEntity {
   const factory PostmanCollectionEntity({
     @JsonKey(name: 'info') PostmanCollectionInfoModel? info,
     @JsonKey(name: 'item') List<PostmanCollectionFolderModel>? folders,
@@ -16,7 +16,7 @@ class PostmanCollectionEntity with _$PostmanCollectionEntity {
 }
 
 @freezed
-class PostmanCollectionInfoModel with _$PostmanCollectionInfoModel {
+abstract class PostmanCollectionInfoModel with _$PostmanCollectionInfoModel {
   const factory PostmanCollectionInfoModel({
     @JsonKey(name: '_postman_id') String? postmanId,
     @JsonKey(name: 'name') String? name,
@@ -29,7 +29,7 @@ class PostmanCollectionInfoModel with _$PostmanCollectionInfoModel {
 }
 
 @freezed
-class PostmanCollectionFolderModel with _$PostmanCollectionFolderModel {
+abstract class PostmanCollectionFolderModel with _$PostmanCollectionFolderModel {
   const factory PostmanCollectionFolderModel({
     @JsonKey(name: 'name') String? name,
     @JsonKey(name: 'item') List<PostmanCollectionApiCallModel>? apiCallModel,
@@ -39,7 +39,7 @@ class PostmanCollectionFolderModel with _$PostmanCollectionFolderModel {
 }
 
 @freezed
-class PostmanCollectionApiCallModel with _$PostmanCollectionApiCallModel {
+abstract class PostmanCollectionApiCallModel with _$PostmanCollectionApiCallModel {
   const factory PostmanCollectionApiCallModel({
     @JsonKey(name: 'name') String? name,
     @JsonKey(name: 'event') List<Event>? event,
@@ -51,7 +51,7 @@ class PostmanCollectionApiCallModel with _$PostmanCollectionApiCallModel {
 }
 
 @freezed
-class Event with _$Event {
+abstract class Event with _$Event {
   const factory Event({
     @JsonKey(name: 'listen') String? listen,
     @JsonKey(name: 'script') Script? script,
@@ -61,7 +61,7 @@ class Event with _$Event {
 }
 
 @freezed
-class Script with _$Script {
+abstract class Script with _$Script {
   const factory Script({
     @JsonKey(name: 'exec') List<String>? exec,
     @JsonKey(name: 'type') String? type,
@@ -72,14 +72,14 @@ class Script with _$Script {
 }
 
 @freezed
-class Packages with _$Packages {
+abstract class Packages with _$Packages {
   const factory Packages() = _Packages;
 
   factory Packages.fromJson(Map<String, dynamic> json) => _$PackagesFromJson(json);
 }
 
 @freezed
-class Request with _$Request {
+abstract class Request with _$Request {
   const factory Request({
     @JsonKey(name: 'method') String? method,
     @JsonKey(name: 'header') List<dynamic>? header,
@@ -92,7 +92,7 @@ class Request with _$Request {
 }
 
 @freezed
-class Auth with _$Auth {
+abstract class Auth with _$Auth {
   const factory Auth({
     @JsonKey(name: 'type') String? type,
     @JsonKey(name: 'bearer') List<Bearer>? bearer,
@@ -102,7 +102,7 @@ class Auth with _$Auth {
 }
 
 @freezed
-class Bearer with _$Bearer {
+abstract class Bearer with _$Bearer {
   const factory Bearer({
     @JsonKey(name: 'key') String? key,
     @JsonKey(name: 'value') String? value,
@@ -123,7 +123,7 @@ enum Type {
 final typeValues = EnumValues({'string': Type.STRING, 'text': Type.TEXT});
 
 @freezed
-class Body with _$Body {
+abstract class Body with _$Body {
   const factory Body({
     @JsonKey(name: 'mode') Mode? mode,
     @JsonKey(name: 'formdata') List<Bearer>? formdata,
@@ -144,7 +144,7 @@ enum Mode {
 final modeValues = EnumValues({'formdata': Mode.FORMDATA, 'raw': Mode.RAW});
 
 @freezed
-class Options with _$Options {
+abstract class Options with _$Options {
   const factory Options({
     @JsonKey(name: 'raw') Raw? raw,
   }) = _Options;
@@ -153,7 +153,7 @@ class Options with _$Options {
 }
 
 @freezed
-class Raw with _$Raw {
+abstract class Raw with _$Raw {
   const factory Raw({
     @JsonKey(name: 'language') String? language,
   }) = _Raw;
@@ -162,7 +162,7 @@ class Raw with _$Raw {
 }
 
 @freezed
-class RequestUrl with _$RequestUrl {
+abstract class RequestUrl with _$RequestUrl {
   const factory RequestUrl({
     @JsonKey(name: 'raw') String? raw,
     @JsonKey(name: 'host') List<String>? host,
@@ -174,7 +174,7 @@ class RequestUrl with _$RequestUrl {
 }
 
 @freezed
-class Header with _$Header {
+abstract class Header with _$Header {
   const factory Header({
     @JsonKey(name: 'key') String? key,
     @JsonKey(name: 'value') String? value,
@@ -184,7 +184,7 @@ class Header with _$Header {
 }
 
 @freezed
-class Response with _$Response {
+abstract class Response with _$Response {
   const factory Response({
     @JsonKey(name: 'name') String? name,
     @JsonKey(name: 'originalRequest') OriginalRequest? originalRequest,
@@ -200,7 +200,7 @@ class Response with _$Response {
 }
 
 @freezed
-class OriginalRequest with _$OriginalRequest {
+abstract class OriginalRequest with _$OriginalRequest {
   const factory OriginalRequest({
     @JsonKey(name: 'method') String? method,
     @JsonKey(name: 'header') List<dynamic>? header,
@@ -212,7 +212,7 @@ class OriginalRequest with _$OriginalRequest {
 }
 
 @freezed
-class OriginalRequestUrl with _$OriginalRequestUrl {
+abstract class OriginalRequestUrl with _$OriginalRequestUrl {
   const factory OriginalRequestUrl({
     @JsonKey(name: 'raw') String? raw,
     @JsonKey(name: 'host') List<String>? host,
@@ -224,7 +224,7 @@ class OriginalRequestUrl with _$OriginalRequestUrl {
 }
 
 @freezed
-class Query with _$Query {
+abstract class Query with _$Query {
   const factory Query({
     @JsonKey(name: 'key') String? key,
     @JsonKey(name: 'value') String? value,
@@ -235,10 +235,9 @@ class Query with _$Query {
 }
 
 class EnumValues<T> {
+  EnumValues(this.map);
   Map<String, T> map;
   late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
 
   Map<T, String> get reverse {
     reverseMap = map.map((k, v) => MapEntry(v, k));

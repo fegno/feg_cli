@@ -6,9 +6,9 @@ part of 'postman_collection_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PostmanCollectionEntityImpl _$$PostmanCollectionEntityImplFromJson(
+_PostmanCollectionEntity _$PostmanCollectionEntityFromJson(
         Map<String, dynamic> json) =>
-    _$PostmanCollectionEntityImpl(
+    _PostmanCollectionEntity(
       info: json['info'] == null
           ? null
           : PostmanCollectionInfoModel.fromJson(
@@ -19,16 +19,16 @@ _$PostmanCollectionEntityImpl _$$PostmanCollectionEntityImplFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$$PostmanCollectionEntityImplToJson(
-        _$PostmanCollectionEntityImpl instance) =>
+Map<String, dynamic> _$PostmanCollectionEntityToJson(
+        _PostmanCollectionEntity instance) =>
     <String, dynamic>{
       'info': instance.info,
       'item': instance.folders,
     };
 
-_$PostmanCollectionInfoModelImpl _$$PostmanCollectionInfoModelImplFromJson(
+_PostmanCollectionInfoModel _$PostmanCollectionInfoModelFromJson(
         Map<String, dynamic> json) =>
-    _$PostmanCollectionInfoModelImpl(
+    _PostmanCollectionInfoModel(
       postmanId: json['_postman_id'] as String?,
       name: json['name'] as String?,
       schema: json['schema'] as String?,
@@ -36,8 +36,8 @@ _$PostmanCollectionInfoModelImpl _$$PostmanCollectionInfoModelImplFromJson(
       collectionLink: json['_collection_link'] as String?,
     );
 
-Map<String, dynamic> _$$PostmanCollectionInfoModelImplToJson(
-        _$PostmanCollectionInfoModelImpl instance) =>
+Map<String, dynamic> _$PostmanCollectionInfoModelToJson(
+        _PostmanCollectionInfoModel instance) =>
     <String, dynamic>{
       '_postman_id': instance.postmanId,
       'name': instance.name,
@@ -46,9 +46,9 @@ Map<String, dynamic> _$$PostmanCollectionInfoModelImplToJson(
       '_collection_link': instance.collectionLink,
     };
 
-_$PostmanCollectionFolderModelImpl _$$PostmanCollectionFolderModelImplFromJson(
+_PostmanCollectionFolderModel _$PostmanCollectionFolderModelFromJson(
         Map<String, dynamic> json) =>
-    _$PostmanCollectionFolderModelImpl(
+    _PostmanCollectionFolderModel(
       name: json['name'] as String?,
       apiCallModel: (json['item'] as List<dynamic>?)
           ?.map((e) =>
@@ -56,30 +56,30 @@ _$PostmanCollectionFolderModelImpl _$$PostmanCollectionFolderModelImplFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$$PostmanCollectionFolderModelImplToJson(
-        _$PostmanCollectionFolderModelImpl instance) =>
+Map<String, dynamic> _$PostmanCollectionFolderModelToJson(
+        _PostmanCollectionFolderModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'item': instance.apiCallModel,
     };
 
-_$PostmanCollectionApiCallModelImpl
-    _$$PostmanCollectionApiCallModelImplFromJson(Map<String, dynamic> json) =>
-        _$PostmanCollectionApiCallModelImpl(
-          name: json['name'] as String?,
-          event: (json['event'] as List<dynamic>?)
-              ?.map((e) => Event.fromJson(e as Map<String, dynamic>))
-              .toList(),
-          request: json['request'] == null
-              ? null
-              : Request.fromJson(json['request'] as Map<String, dynamic>),
-          response: (json['response'] as List<dynamic>?)
-              ?.map((e) => Response.fromJson(e as Map<String, dynamic>))
-              .toList(),
-        );
+_PostmanCollectionApiCallModel _$PostmanCollectionApiCallModelFromJson(
+        Map<String, dynamic> json) =>
+    _PostmanCollectionApiCallModel(
+      name: json['name'] as String?,
+      event: (json['event'] as List<dynamic>?)
+          ?.map((e) => Event.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      request: json['request'] == null
+          ? null
+          : Request.fromJson(json['request'] as Map<String, dynamic>),
+      response: (json['response'] as List<dynamic>?)
+          ?.map((e) => Response.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
-Map<String, dynamic> _$$PostmanCollectionApiCallModelImplToJson(
-        _$PostmanCollectionApiCallModelImpl instance) =>
+Map<String, dynamic> _$PostmanCollectionApiCallModelToJson(
+        _PostmanCollectionApiCallModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'event': instance.event,
@@ -87,20 +87,19 @@ Map<String, dynamic> _$$PostmanCollectionApiCallModelImplToJson(
       'response': instance.response,
     };
 
-_$EventImpl _$$EventImplFromJson(Map<String, dynamic> json) => _$EventImpl(
+_Event _$EventFromJson(Map<String, dynamic> json) => _Event(
       listen: json['listen'] as String?,
       script: json['script'] == null
           ? null
           : Script.fromJson(json['script'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$EventImplToJson(_$EventImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$EventToJson(_Event instance) => <String, dynamic>{
       'listen': instance.listen,
       'script': instance.script,
     };
 
-_$ScriptImpl _$$ScriptImplFromJson(Map<String, dynamic> json) => _$ScriptImpl(
+_Script _$ScriptFromJson(Map<String, dynamic> json) => _Script(
       exec: (json['exec'] as List<dynamic>?)?.map((e) => e as String).toList(),
       type: json['type'] as String?,
       packages: json['packages'] == null
@@ -108,21 +107,18 @@ _$ScriptImpl _$$ScriptImplFromJson(Map<String, dynamic> json) => _$ScriptImpl(
           : Packages.fromJson(json['packages'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$ScriptImplToJson(_$ScriptImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ScriptToJson(_Script instance) => <String, dynamic>{
       'exec': instance.exec,
       'type': instance.type,
       'packages': instance.packages,
     };
 
-_$PackagesImpl _$$PackagesImplFromJson(Map<String, dynamic> json) =>
-    _$PackagesImpl();
+_Packages _$PackagesFromJson(Map<String, dynamic> json) => _Packages();
 
-Map<String, dynamic> _$$PackagesImplToJson(_$PackagesImpl instance) =>
+Map<String, dynamic> _$PackagesToJson(_Packages instance) =>
     <String, dynamic>{};
 
-_$RequestImpl _$$RequestImplFromJson(Map<String, dynamic> json) =>
-    _$RequestImpl(
+_Request _$RequestFromJson(Map<String, dynamic> json) => _Request(
       method: json['method'] as String?,
       header: json['header'] as List<dynamic>?,
       body: json['body'] == null
@@ -136,8 +132,7 @@ _$RequestImpl _$$RequestImplFromJson(Map<String, dynamic> json) =>
           : Auth.fromJson(json['auth'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$RequestImplToJson(_$RequestImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$RequestToJson(_Request instance) => <String, dynamic>{
       'method': instance.method,
       'header': instance.header,
       'body': instance.body,
@@ -145,28 +140,26 @@ Map<String, dynamic> _$$RequestImplToJson(_$RequestImpl instance) =>
       'auth': instance.auth,
     };
 
-_$AuthImpl _$$AuthImplFromJson(Map<String, dynamic> json) => _$AuthImpl(
+_Auth _$AuthFromJson(Map<String, dynamic> json) => _Auth(
       type: json['type'] as String?,
       bearer: (json['bearer'] as List<dynamic>?)
           ?.map((e) => Bearer.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$$AuthImplToJson(_$AuthImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AuthToJson(_Auth instance) => <String, dynamic>{
       'type': instance.type,
       'bearer': instance.bearer,
     };
 
-_$BearerImpl _$$BearerImplFromJson(Map<String, dynamic> json) => _$BearerImpl(
+_Bearer _$BearerFromJson(Map<String, dynamic> json) => _Bearer(
       key: json['key'] as String?,
       value: json['value'] as String?,
       type: $enumDecodeNullable(_$TypeEnumMap, json['type']),
       description: json['description'] as String?,
     );
 
-Map<String, dynamic> _$$BearerImplToJson(_$BearerImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$BearerToJson(_Bearer instance) => <String, dynamic>{
       'key': instance.key,
       'value': instance.value,
       'type': _$TypeEnumMap[instance.type],
@@ -178,7 +171,7 @@ const _$TypeEnumMap = {
   Type.TEXT: 'text',
 };
 
-_$BodyImpl _$$BodyImplFromJson(Map<String, dynamic> json) => _$BodyImpl(
+_Body _$BodyFromJson(Map<String, dynamic> json) => _Body(
       mode: $enumDecodeNullable(_$ModeEnumMap, json['mode']),
       formdata: (json['formdata'] as List<dynamic>?)
           ?.map((e) => Bearer.fromJson(e as Map<String, dynamic>))
@@ -189,8 +182,7 @@ _$BodyImpl _$$BodyImplFromJson(Map<String, dynamic> json) => _$BodyImpl(
           : Options.fromJson(json['options'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$BodyImplToJson(_$BodyImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$BodyToJson(_Body instance) => <String, dynamic>{
       'mode': _$ModeEnumMap[instance.mode],
       'formdata': instance.formdata,
       'raw': instance.raw,
@@ -202,28 +194,25 @@ const _$ModeEnumMap = {
   Mode.RAW: 'raw',
 };
 
-_$OptionsImpl _$$OptionsImplFromJson(Map<String, dynamic> json) =>
-    _$OptionsImpl(
+_Options _$OptionsFromJson(Map<String, dynamic> json) => _Options(
       raw: json['raw'] == null
           ? null
           : Raw.fromJson(json['raw'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$OptionsImplToJson(_$OptionsImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$OptionsToJson(_Options instance) => <String, dynamic>{
       'raw': instance.raw,
     };
 
-_$RawImpl _$$RawImplFromJson(Map<String, dynamic> json) => _$RawImpl(
+_Raw _$RawFromJson(Map<String, dynamic> json) => _Raw(
       language: json['language'] as String?,
     );
 
-Map<String, dynamic> _$$RawImplToJson(_$RawImpl instance) => <String, dynamic>{
+Map<String, dynamic> _$RawToJson(_Raw instance) => <String, dynamic>{
       'language': instance.language,
     };
 
-_$RequestUrlImpl _$$RequestUrlImplFromJson(Map<String, dynamic> json) =>
-    _$RequestUrlImpl(
+_RequestUrl _$RequestUrlFromJson(Map<String, dynamic> json) => _RequestUrl(
       raw: json['raw'] as String?,
       host: (json['host'] as List<dynamic>?)?.map((e) => e as String).toList(),
       path: (json['path'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -232,7 +221,7 @@ _$RequestUrlImpl _$$RequestUrlImplFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$RequestUrlImplToJson(_$RequestUrlImpl instance) =>
+Map<String, dynamic> _$RequestUrlToJson(_RequestUrl instance) =>
     <String, dynamic>{
       'raw': instance.raw,
       'host': instance.host,
@@ -240,19 +229,17 @@ Map<String, dynamic> _$$RequestUrlImplToJson(_$RequestUrlImpl instance) =>
       'query': instance.query,
     };
 
-_$HeaderImpl _$$HeaderImplFromJson(Map<String, dynamic> json) => _$HeaderImpl(
+_Header _$HeaderFromJson(Map<String, dynamic> json) => _Header(
       key: json['key'] as String?,
       value: json['value'] as String?,
     );
 
-Map<String, dynamic> _$$HeaderImplToJson(_$HeaderImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$HeaderToJson(_Header instance) => <String, dynamic>{
       'key': instance.key,
       'value': instance.value,
     };
 
-_$ResponseImpl _$$ResponseImplFromJson(Map<String, dynamic> json) =>
-    _$ResponseImpl(
+_Response _$ResponseFromJson(Map<String, dynamic> json) => _Response(
       name: json['name'] as String?,
       originalRequest: json['originalRequest'] == null
           ? null
@@ -268,8 +255,7 @@ _$ResponseImpl _$$ResponseImplFromJson(Map<String, dynamic> json) =>
       body: json['body'] as String?,
     );
 
-Map<String, dynamic> _$$ResponseImplToJson(_$ResponseImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ResponseToJson(_Response instance) => <String, dynamic>{
       'name': instance.name,
       'originalRequest': instance.originalRequest,
       'status': instance.status,
@@ -280,9 +266,8 @@ Map<String, dynamic> _$$ResponseImplToJson(_$ResponseImpl instance) =>
       'body': instance.body,
     };
 
-_$OriginalRequestImpl _$$OriginalRequestImplFromJson(
-        Map<String, dynamic> json) =>
-    _$OriginalRequestImpl(
+_OriginalRequest _$OriginalRequestFromJson(Map<String, dynamic> json) =>
+    _OriginalRequest(
       method: json['method'] as String?,
       header: json['header'] as List<dynamic>?,
       body: json['body'] == null
@@ -293,8 +278,7 @@ _$OriginalRequestImpl _$$OriginalRequestImplFromJson(
           : OriginalRequestUrl.fromJson(json['url'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$OriginalRequestImplToJson(
-        _$OriginalRequestImpl instance) =>
+Map<String, dynamic> _$OriginalRequestToJson(_OriginalRequest instance) =>
     <String, dynamic>{
       'method': instance.method,
       'header': instance.header,
@@ -302,9 +286,8 @@ Map<String, dynamic> _$$OriginalRequestImplToJson(
       'url': instance.url,
     };
 
-_$OriginalRequestUrlImpl _$$OriginalRequestUrlImplFromJson(
-        Map<String, dynamic> json) =>
-    _$OriginalRequestUrlImpl(
+_OriginalRequestUrl _$OriginalRequestUrlFromJson(Map<String, dynamic> json) =>
+    _OriginalRequestUrl(
       raw: json['raw'] as String?,
       host: (json['host'] as List<dynamic>?)?.map((e) => e as String).toList(),
       path: (json['path'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -313,8 +296,7 @@ _$OriginalRequestUrlImpl _$$OriginalRequestUrlImplFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$$OriginalRequestUrlImplToJson(
-        _$OriginalRequestUrlImpl instance) =>
+Map<String, dynamic> _$OriginalRequestUrlToJson(_OriginalRequestUrl instance) =>
     <String, dynamic>{
       'raw': instance.raw,
       'host': instance.host,
@@ -322,14 +304,13 @@ Map<String, dynamic> _$$OriginalRequestUrlImplToJson(
       'query': instance.query,
     };
 
-_$QueryImpl _$$QueryImplFromJson(Map<String, dynamic> json) => _$QueryImpl(
+_Query _$QueryFromJson(Map<String, dynamic> json) => _Query(
       key: json['key'] as String?,
       value: json['value'] as String?,
       disabled: json['disabled'] as bool?,
     );
 
-Map<String, dynamic> _$$QueryImplToJson(_$QueryImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$QueryToJson(_Query instance) => <String, dynamic>{
       'key': instance.key,
       'value': instance.value,
       'disabled': instance.disabled,

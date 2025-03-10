@@ -5,6 +5,7 @@ import 'package:args/command_runner.dart';
 import 'package:feg_cli/src/commands/commands.dart';
 import 'package:feg_cli/src/constants.dart';
 import 'package:mason/mason.dart';
+import 'package:path/path.dart';
 
 /// {@template repo_command}
 /// A command which generates Flutter repositories from a Postman collection.
@@ -42,13 +43,20 @@ class RepoCommand extends Command<int> {
       return ExitCode.usage.code;
     }
 
+    final environmentPath = _getEnvironmentPath();
+    if (!_validateEnvironmentFile(environmentPath)) {
+      return ExitCode.usage.code;
+    }
+
     final updateProgress = _logger.progress('Processing $collectionPath');
     final collectionJson = json.decode(File(collectionPath).readAsStringSync());
+    final environmentJson = json.decode(File(environmentPath).readAsStringSync());
 
     try {
       final postmanCollection = _parseCollection(collectionJson);
-      _createDirectories();
-      await _processCollection(postmanCollection);
+      final postmanEnvironment = _parseEnvironment(environmentJson);
+      _createDirectories(postmanCollection, postmanEnvironment);
+      await _processCollection(postmanCollection, postmanEnvironment);
       updateProgress.complete('Successfully generated repositories from $collectionPath');
       return ExitCode.success.code;
     } catch (e) {
@@ -78,11 +86,25 @@ class RepoCommand extends Command<int> {
     );
   }
 
+  String _getEnvironmentPath() {
+    return _logger.prompt(
+      '$gQ Where is the postman environment file?',
+    );
+  }
+
   /// Validates that the collection file exists at the given path
   /// Returns true if valid, false otherwise
   bool _validateCollectionFile(String path) {
     if (!File(path).existsSync()) {
       _logger.err('Collection file not found at: $path');
+      return false;
+    }
+    return true;
+  }
+
+  bool _validateEnvironmentFile(String path) {
+    if (!File(path).existsSync()) {
+      _logger.err('Environment file not found at: $path');
       return false;
     }
     return true;
@@ -101,21 +123,51 @@ class RepoCommand extends Command<int> {
     throw Exception('Invalid collection format');
   }
 
+  /// Parses the Postman environment JSON into a [PostmanEnviourmentEntity]
+  /// Throws if the format is invalid
+  PostmanEnviourmentEntity _parseEnvironment(dynamic json) {
+    if (json is String) {
+      return PostmanEnviourmentEntity.fromJson(
+        jsonDecode(json) as Map<String, dynamic>,
+      );
+    } else if (json is Map) {
+      return PostmanEnviourmentEntity.fromJson(json as Map<String, dynamic>);
+    }
+    throw Exception('Invalid environment format');
+  }
+
   /// Creates the necessary directories for code generation
-  void _createDirectories() {
+  void _createDirectories(PostmanCollectionEntity postmanCollection, PostmanEnviourmentEntity postmanEnvironment) {
+    /// Create lib directory
     final libDir = Directory('lib');
     if (!libDir.existsSync()) {
       libDir.createSync();
     }
 
+    /// Create repositories directory
     final reposDir = Directory('lib/repositories');
     if (!reposDir.existsSync()) {
       reposDir.createSync();
     }
+
+    /// Create uris.dart file
+    _addStringToUriFile('''
+import 'package:flutter/foundation.dart';
+
+///* This class contains Api uris
+@immutable
+final class ApiUris {
+  ///* BASE URL
+  static const _baseUrl = String.fromEnvironment('baseUrl');
+
+  ///* CUSTOM URL
+  static String custom(String url) => _baseUrl + url;
+}
+''');
   }
 
   /// Processes each folder in the collection and generates repository files
-  Future<void> _processCollection(PostmanCollectionEntity collection) async {
+  Future<void> _processCollection(PostmanCollectionEntity collection, PostmanEnviourmentEntity environment) async {
     for (final folder in collection.folders ?? <PostmanCollectionFolderModel>[]) {
       if (folder.name == null) continue;
 
@@ -124,7 +176,7 @@ class RepoCommand extends Command<int> {
       final repoFilePath = 'lib/repositories/$repoFileName';
 
       final repoContent = _generateRepositoryContent(folder, folderName);
-      await _processApiCalls(folder, repoContent);
+      await _processApiCalls(folder, repoContent, environment);
 
       repoContent.writeln('}');
       File(repoFilePath).writeAsStringSync(repoContent.toString());
@@ -137,10 +189,11 @@ class RepoCommand extends Command<int> {
     String folderName,
   ) {
     return StringBuffer()
-      ..writeln("import 'package:dartz/dartz.dart';")
-      ..writeln("import 'package:dio/dio.dart';")
-      ..writeln("import 'package:feggy/feggy.dart';")
-      ..writeln("import '../models/${folderName}_models.dart';")
+      // ..writeln("import 'package:dartz/dartz.dart';")
+      // ..writeln("import 'package:dio/dio.dart';")
+      // ..writeln("import 'package:feggy/feggy.dart';")
+      // ..writeln("import '../models/${folderName}_models.dart';")
+      // ..writeln("import '../uris.dart';")
       ..writeln()
       ..writeln('@immutable')
       ..writeln('final class ${folder.name?.pascalCase}Repository {')
@@ -162,11 +215,12 @@ class RepoCommand extends Command<int> {
   Future<void> _processApiCalls(
     PostmanCollectionFolderModel folder,
     StringBuffer repoContent,
+    PostmanEnviourmentEntity environment,
   ) async {
     for (final apiCall in folder.apiCallModel ?? <PostmanCollectionApiCallModel>[]) {
       if (apiCall.name == null || apiCall.request == null) continue;
       final modelInfo = await _generateModel(apiCall);
-      _generateApiMethod(apiCall, modelInfo, repoContent);
+      _generateApiMethod(apiCall, modelInfo, folder, repoContent, environment);
     }
   }
 
@@ -240,25 +294,22 @@ class RepoCommand extends Command<int> {
       await tempFile.delete();
 
       if (result.exitCode == 0) {
-        final modelContent = '''
-          // ignore_for_file: invalid_annotation_target
-          
-          import 'package:freezed_annotation/freezed_annotation.dart';
-          
-          part '${modelFileName.replaceAll('.dart', '.freezed.dart')}';
-          part '${modelFileName.replaceAll('.dart', '.g.dart')}';
-          
-          ${result.stdout}
-          ''';
-
         final modelFile = File(modelFilePath);
-        if (!modelFile.existsSync()) {
+        if (modelFile.existsSync()) {
+          final fileContent = modelFile.readAsLinesSync();
+          for (var i = 0; i < 15; i++) {
+            fileContent.removeAt(0);
+          }
+          final modelContent = '''
+// ignore_for_file: invalid_annotation_target, constant_identifier_names, join_return_with_assignment
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '${modelFileName.replaceAll('.dart', '.freezed.dart')}';
+part '${modelFileName.replaceAll('.dart', '.g.dart')}';
+
+${fileContent.map((e) => e.replaceAll('"', "'")).join('\n')}
+''';
           modelFile.writeAsStringSync(modelContent);
-        } else {
-          modelFile.writeAsStringSync(
-            '\n\n$modelContent',
-            mode: FileMode.append,
-          );
         }
       }
     } catch (e) {
@@ -270,12 +321,13 @@ class RepoCommand extends Command<int> {
   void _generateApiMethod(
     PostmanCollectionApiCallModel apiCall,
     ({String name, String fileName, String filePath}) modelInfo,
+    PostmanCollectionFolderModel folder,
     StringBuffer repoContent,
+    PostmanEnviourmentEntity environment,
   ) {
     final methodName = apiCall.name!.toLowerCase().replaceAll(' ', '_');
     final request = apiCall.request!;
     final method = request.method?.toLowerCase() ?? 'get';
-    final url = request.url?.raw ?? '';
     final hasAuth = request.auth != null;
     final hasBody = request.body != null;
     final queryParams = request.url?.query?.fold<Map<String, String>>({}, (map, q) {
@@ -285,26 +337,87 @@ class RepoCommand extends Command<int> {
       return map;
     });
     final hasQueryParams = queryParams?.isNotEmpty ?? false;
+    var url = request.url?.raw ?? '';
+    if (url.contains('{{')) {
+      final variableName = url.split('{{')[1].split('}}')[0];
+      final variable = environment.values?.firstWhere(
+        (element) => element.key == variableName,
+        orElse: PostmanEnviourmentRowEntity.new,
+      );
+      url = url.replaceAll('{{$variableName}}', variable?.value ?? '');
+    }
 
-    repoContent.writeln('  ///* $methodName');
+    if (url.contains('?')) {
+      url = url.split('?')[0];
+    }
+
+    if (url.split('/').last.isEmpty) {
+      url = url.substring(0, url.length - 1);
+    }
+
+    repoContent
+      ..writeln('  /*')
+      ..writeln('   @api {${request.method?.toUpperCase()} $url} $url')
+      ..writeln('   @apiName ${apiCall.name}')
+      ..writeln('   @apiGroup ${folder.name?.pascalCase}\n');
+
     if (hasQueryParams || hasBody) {
-      repoContent.writeln('  Future<Either<ApiException, ${modelInfo.name.isNotEmpty ? modelInfo.name : 'void'}>> $methodName(');
+      if (hasBody) {
+        repoContent
+          ..writeln('   @apiBody {json} body Request payload')
+          ..writeln('   ```json')
+          ..writeln('   ${request.body?.raw}')
+          ..writeln('   ```\n');
+      }
+      if (hasQueryParams) {
+        repoContent
+          ..writeln('   @apiParamExample {json} Request-Example:')
+          ..writeln('   ```json')
+          ..writeln('   ${queryParams?.entries.map((e) => '${e.key}=${e.value}').join(', ')}')
+          ..writeln('   ```\n');
+      }
+    }
+
+    repoContent
+      ..writeln('   @apiSuccess {${modelInfo.name.isNotEmpty ? modelInfo.name : 'void'}} response Success response')
+      ..writeln('   */');
+    // Extract path segments
+    final pathSegments = Uri.parse(url).pathSegments;
+
+    // Check if path contains an ID (example: last segment is the ID)
+    final hasId = pathSegments.isNotEmpty && pathSegments.last.isNotEmpty && int.tryParse(pathSegments.last) != null;
+    _logger.info('last segment: ${pathSegments.last}');
+    if (hasId) {
+      url = url.substring(0, url.length - url.split('/').last.length);
+      _addStringToUriFile("static String $methodName(int id) => '$url\$id/';");
+    } else {
+      _addStringToUriFile("static const $methodName = '$url/';");
+    }
+    if (hasQueryParams || hasBody || hasId) {
+      repoContent.writeln('  Future<Either<ApiException, ${modelInfo.name.isNotEmpty ? modelInfo.name : 'void'}>> $methodName({');
+      if (hasId) {
+        repoContent.writeln('    required int id,');
+      }
       if (hasQueryParams) {
         repoContent.writeln('    required Map<String, dynamic> queryParameters,');
       }
       if (hasBody) {
         repoContent.writeln('    required Map<String, dynamic> body,');
       }
-      repoContent.writeln('  ) async {');
+      repoContent.writeln('  }) async {');
     } else {
       repoContent.writeln('  Future<Either<ApiException, ${modelInfo.name.isNotEmpty ? modelInfo.name : 'void'}>> $methodName() async {');
     }
+
     repoContent
       ..writeln('    try {')
       ..writeln('      return await Feggy.async(')
-      ..writeln('        call: Dio().$method<dynamic>(')
-      ..writeln("          '$url',");
-
+      ..writeln('        call: Dio().$method<dynamic>(');
+    if (hasId) {
+      repoContent.writeln('          ApiUris.$methodName(id),');
+    } else {
+      repoContent.writeln('          ApiUris.$methodName,');
+    }
     if (hasAuth) {
       repoContent.writeln('          options: Options().token,');
     }
@@ -342,5 +455,23 @@ class RepoCommand extends Command<int> {
       ..writeln('    }')
       ..writeln('  }')
       ..writeln();
+  }
+
+  /// Generates the base url for the API
+  void _addStringToUriFile(String urisContent) {
+    /// Create uris.dart file
+    final appUrisPath = join(
+      Directory.current.path,
+      'lib',
+      'uris.dart',
+    );
+    if (!File(appUrisPath).existsSync()) {
+      File(appUrisPath).writeAsStringSync(urisContent);
+    } else if (File(appUrisPath).existsSync()) {
+      final fileContent = File(appUrisPath).readAsStringSync();
+      File(appUrisPath).writeAsStringSync(
+        '${fileContent.replaceAll('}', '')}\n  $urisContent\n}\n',
+      );
+    }
   }
 }
