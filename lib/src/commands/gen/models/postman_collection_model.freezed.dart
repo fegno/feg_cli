@@ -2113,10 +2113,12 @@ class __$BearerCopyWithImpl<$Res> implements _$BearerCopyWith<$Res> {
 
 /// @nodoc
 mixin _$Body {
-  @JsonKey(name: 'mode')
-  Mode? get mode;
-  @JsonKey(name: 'formdata')
-  List<Bearer>? get formdata;
+  @JsonKey(name: "mode")
+  String? get mode;
+  @JsonKey(name: "formdata")
+  List<Formdatum>? get formdata;
+  @JsonKey(name: "urlencoded")
+  List<dynamic>? get urlencoded;
   @JsonKey(name: 'raw')
   String? get raw;
   @JsonKey(name: 'options')
@@ -2139,18 +2141,25 @@ mixin _$Body {
             other is Body &&
             (identical(other.mode, mode) || other.mode == mode) &&
             const DeepCollectionEquality().equals(other.formdata, formdata) &&
+            const DeepCollectionEquality()
+                .equals(other.urlencoded, urlencoded) &&
             (identical(other.raw, raw) || other.raw == raw) &&
             (identical(other.options, options) || other.options == options));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, mode,
-      const DeepCollectionEquality().hash(formdata), raw, options);
+  int get hashCode => Object.hash(
+      runtimeType,
+      mode,
+      const DeepCollectionEquality().hash(formdata),
+      const DeepCollectionEquality().hash(urlencoded),
+      raw,
+      options);
 
   @override
   String toString() {
-    return 'Body(mode: $mode, formdata: $formdata, raw: $raw, options: $options)';
+    return 'Body(mode: $mode, formdata: $formdata, urlencoded: $urlencoded, raw: $raw, options: $options)';
   }
 }
 
@@ -2160,8 +2169,9 @@ abstract mixin class $BodyCopyWith<$Res> {
       _$BodyCopyWithImpl;
   @useResult
   $Res call(
-      {@JsonKey(name: 'mode') Mode? mode,
-      @JsonKey(name: 'formdata') List<Bearer>? formdata,
+      {@JsonKey(name: "mode") String? mode,
+      @JsonKey(name: "formdata") List<Formdatum>? formdata,
+      @JsonKey(name: "urlencoded") List<dynamic>? urlencoded,
       @JsonKey(name: 'raw') String? raw,
       @JsonKey(name: 'options') Options? options});
 
@@ -2182,6 +2192,7 @@ class _$BodyCopyWithImpl<$Res> implements $BodyCopyWith<$Res> {
   $Res call({
     Object? mode = freezed,
     Object? formdata = freezed,
+    Object? urlencoded = freezed,
     Object? raw = freezed,
     Object? options = freezed,
   }) {
@@ -2189,11 +2200,15 @@ class _$BodyCopyWithImpl<$Res> implements $BodyCopyWith<$Res> {
       mode: freezed == mode
           ? _self.mode
           : mode // ignore: cast_nullable_to_non_nullable
-              as Mode?,
+              as String?,
       formdata: freezed == formdata
           ? _self.formdata
           : formdata // ignore: cast_nullable_to_non_nullable
-              as List<Bearer>?,
+              as List<Formdatum>?,
+      urlencoded: freezed == urlencoded
+          ? _self.urlencoded
+          : urlencoded // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
       raw: freezed == raw
           ? _self.raw
           : raw // ignore: cast_nullable_to_non_nullable
@@ -2224,23 +2239,36 @@ class _$BodyCopyWithImpl<$Res> implements $BodyCopyWith<$Res> {
 @JsonSerializable()
 class _Body implements Body {
   const _Body(
-      {@JsonKey(name: 'mode') this.mode,
-      @JsonKey(name: 'formdata') final List<Bearer>? formdata,
+      {@JsonKey(name: "mode") this.mode,
+      @JsonKey(name: "formdata") final List<Formdatum>? formdata,
+      @JsonKey(name: "urlencoded") final List<dynamic>? urlencoded,
       @JsonKey(name: 'raw') this.raw,
       @JsonKey(name: 'options') this.options})
-      : _formdata = formdata;
+      : _formdata = formdata,
+        _urlencoded = urlencoded;
   factory _Body.fromJson(Map<String, dynamic> json) => _$BodyFromJson(json);
 
   @override
-  @JsonKey(name: 'mode')
-  final Mode? mode;
-  final List<Bearer>? _formdata;
+  @JsonKey(name: "mode")
+  final String? mode;
+  final List<Formdatum>? _formdata;
   @override
-  @JsonKey(name: 'formdata')
-  List<Bearer>? get formdata {
+  @JsonKey(name: "formdata")
+  List<Formdatum>? get formdata {
     final value = _formdata;
     if (value == null) return null;
     if (_formdata is EqualUnmodifiableListView) return _formdata;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<dynamic>? _urlencoded;
+  @override
+  @JsonKey(name: "urlencoded")
+  List<dynamic>? get urlencoded {
+    final value = _urlencoded;
+    if (value == null) return null;
+    if (_urlencoded is EqualUnmodifiableListView) return _urlencoded;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -2274,18 +2302,25 @@ class _Body implements Body {
             other is _Body &&
             (identical(other.mode, mode) || other.mode == mode) &&
             const DeepCollectionEquality().equals(other._formdata, _formdata) &&
+            const DeepCollectionEquality()
+                .equals(other._urlencoded, _urlencoded) &&
             (identical(other.raw, raw) || other.raw == raw) &&
             (identical(other.options, options) || other.options == options));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, mode,
-      const DeepCollectionEquality().hash(_formdata), raw, options);
+  int get hashCode => Object.hash(
+      runtimeType,
+      mode,
+      const DeepCollectionEquality().hash(_formdata),
+      const DeepCollectionEquality().hash(_urlencoded),
+      raw,
+      options);
 
   @override
   String toString() {
-    return 'Body(mode: $mode, formdata: $formdata, raw: $raw, options: $options)';
+    return 'Body(mode: $mode, formdata: $formdata, urlencoded: $urlencoded, raw: $raw, options: $options)';
   }
 }
 
@@ -2296,8 +2331,9 @@ abstract mixin class _$BodyCopyWith<$Res> implements $BodyCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'mode') Mode? mode,
-      @JsonKey(name: 'formdata') List<Bearer>? formdata,
+      {@JsonKey(name: "mode") String? mode,
+      @JsonKey(name: "formdata") List<Formdatum>? formdata,
+      @JsonKey(name: "urlencoded") List<dynamic>? urlencoded,
       @JsonKey(name: 'raw') String? raw,
       @JsonKey(name: 'options') Options? options});
 
@@ -2319,6 +2355,7 @@ class __$BodyCopyWithImpl<$Res> implements _$BodyCopyWith<$Res> {
   $Res call({
     Object? mode = freezed,
     Object? formdata = freezed,
+    Object? urlencoded = freezed,
     Object? raw = freezed,
     Object? options = freezed,
   }) {
@@ -2326,11 +2363,15 @@ class __$BodyCopyWithImpl<$Res> implements _$BodyCopyWith<$Res> {
       mode: freezed == mode
           ? _self.mode
           : mode // ignore: cast_nullable_to_non_nullable
-              as Mode?,
+              as String?,
       formdata: freezed == formdata
           ? _self._formdata
           : formdata // ignore: cast_nullable_to_non_nullable
-              as List<Bearer>?,
+              as List<Formdatum>?,
+      urlencoded: freezed == urlencoded
+          ? _self._urlencoded
+          : urlencoded // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>?,
       raw: freezed == raw
           ? _self.raw
           : raw // ignore: cast_nullable_to_non_nullable
@@ -2354,6 +2395,237 @@ class __$BodyCopyWithImpl<$Res> implements _$BodyCopyWith<$Res> {
     return $OptionsCopyWith<$Res>(_self.options!, (value) {
       return _then(_self.copyWith(options: value));
     });
+  }
+}
+
+/// @nodoc
+mixin _$Formdatum {
+  @JsonKey(name: "key")
+  String? get key;
+  @JsonKey(name: "value")
+  String? get value;
+  @JsonKey(name: "type")
+  String? get type;
+  @JsonKey(name: "description")
+  String? get description;
+  @JsonKey(name: "disabled")
+  bool? get disabled;
+
+  /// Create a copy of Formdatum
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $FormdatumCopyWith<Formdatum> get copyWith =>
+      _$FormdatumCopyWithImpl<Formdatum>(this as Formdatum, _$identity);
+
+  /// Serializes this Formdatum to a JSON map.
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Formdatum &&
+            (identical(other.key, key) || other.key == key) &&
+            (identical(other.value, value) || other.value == value) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.disabled, disabled) ||
+                other.disabled == disabled));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, key, value, type, description, disabled);
+
+  @override
+  String toString() {
+    return 'Formdatum(key: $key, value: $value, type: $type, description: $description, disabled: $disabled)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $FormdatumCopyWith<$Res> {
+  factory $FormdatumCopyWith(Formdatum value, $Res Function(Formdatum) _then) =
+      _$FormdatumCopyWithImpl;
+  @useResult
+  $Res call(
+      {@JsonKey(name: "key") String? key,
+      @JsonKey(name: "value") String? value,
+      @JsonKey(name: "type") String? type,
+      @JsonKey(name: "description") String? description,
+      @JsonKey(name: "disabled") bool? disabled});
+}
+
+/// @nodoc
+class _$FormdatumCopyWithImpl<$Res> implements $FormdatumCopyWith<$Res> {
+  _$FormdatumCopyWithImpl(this._self, this._then);
+
+  final Formdatum _self;
+  final $Res Function(Formdatum) _then;
+
+  /// Create a copy of Formdatum
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? key = freezed,
+    Object? value = freezed,
+    Object? type = freezed,
+    Object? description = freezed,
+    Object? disabled = freezed,
+  }) {
+    return _then(_self.copyWith(
+      key: freezed == key
+          ? _self.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String?,
+      value: freezed == value
+          ? _self.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      disabled: freezed == disabled
+          ? _self.disabled
+          : disabled // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _Formdatum implements Formdatum {
+  const _Formdatum(
+      {@JsonKey(name: "key") this.key,
+      @JsonKey(name: "value") this.value,
+      @JsonKey(name: "type") this.type,
+      @JsonKey(name: "description") this.description,
+      @JsonKey(name: "disabled") this.disabled});
+  factory _Formdatum.fromJson(Map<String, dynamic> json) =>
+      _$FormdatumFromJson(json);
+
+  @override
+  @JsonKey(name: "key")
+  final String? key;
+  @override
+  @JsonKey(name: "value")
+  final String? value;
+  @override
+  @JsonKey(name: "type")
+  final String? type;
+  @override
+  @JsonKey(name: "description")
+  final String? description;
+  @override
+  @JsonKey(name: "disabled")
+  final bool? disabled;
+
+  /// Create a copy of Formdatum
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$FormdatumCopyWith<_Formdatum> get copyWith =>
+      __$FormdatumCopyWithImpl<_Formdatum>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$FormdatumToJson(
+      this,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _Formdatum &&
+            (identical(other.key, key) || other.key == key) &&
+            (identical(other.value, value) || other.value == value) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.disabled, disabled) ||
+                other.disabled == disabled));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, key, value, type, description, disabled);
+
+  @override
+  String toString() {
+    return 'Formdatum(key: $key, value: $value, type: $type, description: $description, disabled: $disabled)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$FormdatumCopyWith<$Res>
+    implements $FormdatumCopyWith<$Res> {
+  factory _$FormdatumCopyWith(
+          _Formdatum value, $Res Function(_Formdatum) _then) =
+      __$FormdatumCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: "key") String? key,
+      @JsonKey(name: "value") String? value,
+      @JsonKey(name: "type") String? type,
+      @JsonKey(name: "description") String? description,
+      @JsonKey(name: "disabled") bool? disabled});
+}
+
+/// @nodoc
+class __$FormdatumCopyWithImpl<$Res> implements _$FormdatumCopyWith<$Res> {
+  __$FormdatumCopyWithImpl(this._self, this._then);
+
+  final _Formdatum _self;
+  final $Res Function(_Formdatum) _then;
+
+  /// Create a copy of Formdatum
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? key = freezed,
+    Object? value = freezed,
+    Object? type = freezed,
+    Object? description = freezed,
+    Object? disabled = freezed,
+  }) {
+    return _then(_Formdatum(
+      key: freezed == key
+          ? _self.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String?,
+      value: freezed == value
+          ? _self.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      disabled: freezed == disabled
+          ? _self.disabled
+          : disabled // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
   }
 }
 

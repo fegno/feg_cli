@@ -125,8 +125,9 @@ final typeValues = EnumValues({'string': Type.STRING, 'text': Type.TEXT});
 @freezed
 abstract class Body with _$Body {
   const factory Body({
-    @JsonKey(name: 'mode') Mode? mode,
-    @JsonKey(name: 'formdata') List<Bearer>? formdata,
+    @JsonKey(name: 'mode') String? mode,
+    @JsonKey(name: 'formdata') List<Formdatum>? formdata,
+    @JsonKey(name: 'urlencoded') List<dynamic>? urlencoded,
     @JsonKey(name: 'raw') String? raw,
     @JsonKey(name: 'options') Options? options,
   }) = _Body;
@@ -134,14 +135,18 @@ abstract class Body with _$Body {
   factory Body.fromJson(Map<String, dynamic> json) => _$BodyFromJson(json);
 }
 
-enum Mode {
-  @JsonValue('formdata')
-  FORMDATA,
-  @JsonValue('raw')
-  RAW
-}
+@freezed
+abstract class Formdatum with _$Formdatum {
+  const factory Formdatum({
+    @JsonKey(name: 'key') String? key,
+    @JsonKey(name: 'value') String? value,
+    @JsonKey(name: 'type') String? type,
+    @JsonKey(name: 'description') String? description,
+    @JsonKey(name: 'disabled') bool? disabled,
+  }) = _Formdatum;
 
-final modeValues = EnumValues({'formdata': Mode.FORMDATA, 'raw': Mode.RAW});
+  factory Formdatum.fromJson(Map<String, dynamic> json) => _$FormdatumFromJson(json);
+}
 
 @freezed
 abstract class Options with _$Options {

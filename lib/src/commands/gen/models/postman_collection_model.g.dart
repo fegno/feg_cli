@@ -172,10 +172,11 @@ const _$TypeEnumMap = {
 };
 
 _Body _$BodyFromJson(Map<String, dynamic> json) => _Body(
-      mode: $enumDecodeNullable(_$ModeEnumMap, json['mode']),
+      mode: json['mode'] as String?,
       formdata: (json['formdata'] as List<dynamic>?)
-          ?.map((e) => Bearer.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Formdatum.fromJson(e as Map<String, dynamic>))
           .toList(),
+      urlencoded: json['urlencoded'] as List<dynamic>?,
       raw: json['raw'] as String?,
       options: json['options'] == null
           ? null
@@ -183,16 +184,29 @@ _Body _$BodyFromJson(Map<String, dynamic> json) => _Body(
     );
 
 Map<String, dynamic> _$BodyToJson(_Body instance) => <String, dynamic>{
-      'mode': _$ModeEnumMap[instance.mode],
+      'mode': instance.mode,
       'formdata': instance.formdata,
+      'urlencoded': instance.urlencoded,
       'raw': instance.raw,
       'options': instance.options,
     };
 
-const _$ModeEnumMap = {
-  Mode.FORMDATA: 'formdata',
-  Mode.RAW: 'raw',
-};
+_Formdatum _$FormdatumFromJson(Map<String, dynamic> json) => _Formdatum(
+      key: json['key'] as String?,
+      value: json['value'] as String?,
+      type: json['type'] as String?,
+      description: json['description'] as String?,
+      disabled: json['disabled'] as bool?,
+    );
+
+Map<String, dynamic> _$FormdatumToJson(_Formdatum instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'type': instance.type,
+      'description': instance.description,
+      'disabled': instance.disabled,
+    };
 
 _Options _$OptionsFromJson(Map<String, dynamic> json) => _Options(
       raw: json['raw'] == null
