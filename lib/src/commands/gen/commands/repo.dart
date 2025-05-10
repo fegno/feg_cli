@@ -253,7 +253,7 @@ final class ApiUris {
     PostmanEnviourmentEntity environment, {
     String? alraedyAvailableAppUriPath,
   }) async {
-    for (final apiCall in folder.apiCallModel ?? <PostmanCollectionApiCallModel>[]) {
+    for (final apiCall in folder.apiCallModel ?? <PostmanCollectionRequestModel>[]) {
       if (apiCall.name == null || apiCall.request == null) continue;
       final modelInfo = await _generateModel(apiCall);
       _generateApiMethod(
@@ -270,7 +270,7 @@ final class ApiUris {
   /// Generates model classes from API response using quicktype
   /// Returns model name, file name and path
   Future<({String name, String fileName, String filePath})> _generateModel(
-    PostmanCollectionApiCallModel apiCall,
+    PostmanCollectionRequestModel apiCall,
   ) async {
     var modelName = '';
     var modelFileName = '';
@@ -304,7 +304,7 @@ final class ApiUris {
 
   /// Generates a model file using quicktype CLI tool
   Future<void> _generateModelFile(
-    PostmanCollectionApiCallModel apiCall,
+    PostmanCollectionRequestModel apiCall,
     Response response,
     String modelName,
     String modelFileName,
@@ -368,7 +368,7 @@ ${fileContent.map((e) => e.replaceAll('"', "'")).join('\n')}
 
   /// Generates an API method for a single endpoint
   void _generateApiMethod(
-    PostmanCollectionApiCallModel apiCall,
+    PostmanCollectionRequestModel apiCall,
     ({String name, String fileName, String filePath}) modelInfo,
     PostmanCollectionFolderModel folder,
     StringBuffer repoContent,

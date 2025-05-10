@@ -1,32 +1,71 @@
-// ignore_for_file: invalid_annotation_target
+class PostmanEnviourmentEntity {
+  PostmanEnviourmentEntity({
+    this.id,
+    this.name,
+    this.values,
+    this.postmanVariableScope,
+    this.postmanExportedAt,
+    this.postmanExportedUsing,
+  });
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+  factory PostmanEnviourmentEntity.fromJson(Map<String, dynamic> json) {
+    return PostmanEnviourmentEntity(
+      id: json['id'] as String?,
+      name: json['name'] as String?,
+      values: (json['values'] as List<dynamic>?)?.map((e) => PostmanEnviourmentRowEntity.fromJson(e as Map<String, dynamic>)).toList(),
+      postmanVariableScope: json['_postman_variable_scope'] as String?,
+      postmanExportedAt: json['_postman_exported_at'] != null ? DateTime.parse(json['_postman_exported_at'] as String) : null,
+      postmanExportedUsing: json['_postman_exported_using'] as String?,
+    );
+  }
 
-part 'postman_enviourment_model.freezed.dart';
-part 'postman_enviourment_model.g.dart';
+  final String? id;
+  final String? name;
+  final List<PostmanEnviourmentRowEntity>? values;
+  final String? postmanVariableScope;
+  final DateTime? postmanExportedAt;
+  final String? postmanExportedUsing;
 
-@freezed
-abstract class PostmanEnviourmentEntity with _$PostmanEnviourmentEntity {
-  const factory PostmanEnviourmentEntity({
-    @JsonKey(name: 'id') String? id,
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'values') List<PostmanEnviourmentRowEntity>? values,
-    @JsonKey(name: '_postman_variable_scope') String? postmanVariableScope,
-    @JsonKey(name: '_postman_exported_at') DateTime? postmanExportedAt,
-    @JsonKey(name: '_postman_exported_using') String? postmanExportedUsing,
-  }) = _PostmanEnviourmentEntity;
-
-  factory PostmanEnviourmentEntity.fromJson(Map<String, dynamic> json) => _$PostmanEnviourmentEntityFromJson(json);
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'values': values?.map((e) => e.toJson()).toList(),
+      '_postman_variable_scope': postmanVariableScope,
+      '_postman_exported_at': postmanExportedAt?.toIso8601String(),
+      '_postman_exported_using': postmanExportedUsing,
+    };
+  }
 }
 
-@freezed
-abstract class PostmanEnviourmentRowEntity with _$PostmanEnviourmentRowEntity {
-  const factory PostmanEnviourmentRowEntity({
-    @JsonKey(name: 'key') String? key,
-    @JsonKey(name: 'value') String? value,
-    @JsonKey(name: 'type') String? type,
-    @JsonKey(name: 'enabled') bool? enabled,
-  }) = _PostmanEnviourmentRowEntity;
+class PostmanEnviourmentRowEntity {
+  PostmanEnviourmentRowEntity({
+    this.key,
+    this.value,
+    this.type,
+    this.enabled,
+  });
 
-  factory PostmanEnviourmentRowEntity.fromJson(Map<String, dynamic> json) => _$PostmanEnviourmentRowEntityFromJson(json);
+  factory PostmanEnviourmentRowEntity.fromJson(Map<String, dynamic> json) {
+    return PostmanEnviourmentRowEntity(
+      key: json['key'] as String?,
+      value: json['value'] as String?,
+      type: json['type'] as String?,
+      enabled: json['enabled'] as bool?,
+    );
+  }
+
+  final String? key;
+  final String? value;
+  final String? type;
+  final bool? enabled;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'key': key,
+      'value': value,
+      'type': type,
+      'enabled': enabled,
+    };
+  }
 }

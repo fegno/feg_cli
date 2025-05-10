@@ -1,242 +1,500 @@
-// ignore_for_file: invalid_annotation_target, constant_identifier_names, join_return_with_assignment
+class PostmanCollectionEntity {
+  const PostmanCollectionEntity({this.info, this.folders});
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+  factory PostmanCollectionEntity.fromJson(Map<String, dynamic> json) {
+    return PostmanCollectionEntity(
+      info: json['info'] != null ? PostmanCollectionInfoModel.fromJson(json['info'] as Map<String, dynamic>) : null,
+      folders: (json['item'] as List<dynamic>?)?.map((e) => PostmanCollectionFolderModel.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+  final PostmanCollectionInfoModel? info;
+  final List<PostmanCollectionFolderModel>? folders;
 
-part 'postman_collection_model.freezed.dart';
-part 'postman_collection_model.g.dart';
-
-@freezed
-abstract class PostmanCollectionEntity with _$PostmanCollectionEntity {
-  const factory PostmanCollectionEntity({
-    @JsonKey(name: 'info') PostmanCollectionInfoModel? info,
-    @JsonKey(name: 'item') List<PostmanCollectionFolderModel>? folders,
-  }) = _PostmanCollectionEntity;
-
-  factory PostmanCollectionEntity.fromJson(Map<String, dynamic> json) => _$PostmanCollectionEntityFromJson(json);
+  Map<String, dynamic> toJson() => {
+        'info': info?.toJson(),
+        'item': folders?.map((e) => e.toJson()).toList(),
+      };
 }
 
-@freezed
-abstract class PostmanCollectionInfoModel with _$PostmanCollectionInfoModel {
-  const factory PostmanCollectionInfoModel({
-    @JsonKey(name: '_postman_id') String? postmanId,
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'schema') String? schema,
-    @JsonKey(name: '_exporter_id') String? exporterId,
-    @JsonKey(name: '_collection_link') String? collectionLink,
-  }) = _PostmanCollectionInfoModel;
+class PostmanCollectionInfoModel {
+  const PostmanCollectionInfoModel({
+    this.postmanId,
+    this.name,
+    this.schema,
+    this.exporterId,
+    this.collectionLink,
+  });
 
-  factory PostmanCollectionInfoModel.fromJson(Map<String, dynamic> json) => _$PostmanCollectionInfoModelFromJson(json);
+  factory PostmanCollectionInfoModel.fromJson(Map<String, dynamic> json) {
+    return PostmanCollectionInfoModel(
+      postmanId: json['_postman_id'] as String?,
+      name: json['name'] as String?,
+      schema: json['schema'] as String?,
+      exporterId: json['_exporter_id'] as String?,
+      collectionLink: json['_collection_link'] as String?,
+    );
+  }
+  final String? postmanId;
+  final String? name;
+  final String? schema;
+  final String? exporterId;
+  final String? collectionLink;
+
+  Map<String, dynamic> toJson() => {
+        '_postman_id': postmanId,
+        'name': name,
+        'schema': schema,
+        '_exporter_id': exporterId,
+        '_collection_link': collectionLink,
+      };
 }
 
-@freezed
-abstract class PostmanCollectionFolderModel with _$PostmanCollectionFolderModel {
-  const factory PostmanCollectionFolderModel({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'item') List<PostmanCollectionApiCallModel>? apiCallModel,
-  }) = _PostmanCollectionFolderModel;
+class PostmanCollectionFolderModel {
+  const PostmanCollectionFolderModel({this.name, this.apiCallModel});
 
-  factory PostmanCollectionFolderModel.fromJson(Map<String, dynamic> json) => _$PostmanCollectionFolderModelFromJson(json);
+  factory PostmanCollectionFolderModel.fromJson(Map<String, dynamic> json) {
+    return PostmanCollectionFolderModel(
+      name: json['name'] as String?,
+      apiCallModel: (json['item'] as List<dynamic>?)?.map((e) => PostmanCollectionRequestModel.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+  final String? name;
+  final List<PostmanCollectionRequestModel>? apiCallModel;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'item': apiCallModel?.map((e) => e.toJson()).toList(),
+      };
 }
 
-@freezed
-abstract class PostmanCollectionApiCallModel with _$PostmanCollectionApiCallModel {
-  const factory PostmanCollectionApiCallModel({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'event') List<Event>? event,
-    @JsonKey(name: 'request') Request? request,
-    @JsonKey(name: 'response') List<Response>? response,
-  }) = _PostmanCollectionApiCallModel;
+class PostmanCollectionRequestModel {
+  const PostmanCollectionRequestModel({
+    this.name,
+    this.event,
+    this.request,
+    this.response,
+  });
 
-  factory PostmanCollectionApiCallModel.fromJson(Map<String, dynamic> json) => _$PostmanCollectionApiCallModelFromJson(json);
+  factory PostmanCollectionRequestModel.fromJson(Map<String, dynamic> json) {
+    return PostmanCollectionRequestModel(
+      name: json['name'] as String?,
+      event: (json['event'] as List<dynamic>?)?.map((e) => Event.fromJson(e as Map<String, dynamic>)).toList(),
+      request: json['request'] != null ? Request.fromJson(json['request'] as Map<String, dynamic>) : null,
+      response: (json['response'] as List<dynamic>?)?.map((e) => Response.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+  final String? name;
+  final List<Event>? event;
+  final Request? request;
+  final List<Response>? response;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'event': event?.map((e) => e.toJson()).toList(),
+        'request': request?.toJson(),
+        'response': response?.map((e) => e.toJson()).toList(),
+      };
 }
 
-@freezed
-abstract class Event with _$Event {
-  const factory Event({
-    @JsonKey(name: 'listen') String? listen,
-    @JsonKey(name: 'script') Script? script,
-  }) = _Event;
+class Event {
+  const Event({this.listen, this.script});
 
-  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      listen: json['listen'] as String?,
+      script: json['script'] != null ? Script.fromJson(json['script'] as Map<String, dynamic>) : null,
+    );
+  }
+  final String? listen;
+  final Script? script;
+
+  Map<String, dynamic> toJson() => {
+        'listen': listen,
+        'script': script?.toJson(),
+      };
 }
 
-@freezed
-abstract class Script with _$Script {
-  const factory Script({
-    @JsonKey(name: 'exec') List<String>? exec,
-    @JsonKey(name: 'type') String? type,
-    @JsonKey(name: 'packages') Packages? packages,
-  }) = _Script;
+class Script {
+  const Script({this.exec, this.type, this.packages});
 
-  factory Script.fromJson(Map<String, dynamic> json) => _$ScriptFromJson(json);
+  factory Script.fromJson(Map<String, dynamic> json) {
+    return Script(
+      exec: (json['exec'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      type: json['type'] as String?,
+      packages: json['packages'] != null ? Packages.fromJson(json['packages'] as Map<String, dynamic>) : null,
+    );
+  }
+  final List<String>? exec;
+  final String? type;
+  final Packages? packages;
+
+  Map<String, dynamic> toJson() => {
+        'exec': exec,
+        'type': type,
+        'packages': packages?.toJson(),
+      };
 }
 
-@freezed
-abstract class Packages with _$Packages {
-  const factory Packages() = _Packages;
+class Packages {
+  const Packages();
 
-  factory Packages.fromJson(Map<String, dynamic> json) => _$PackagesFromJson(json);
+  factory Packages.fromJson([Map<String, dynamic>? json]) => const Packages();
+
+  Map<String, dynamic> toJson() => {};
 }
 
-@freezed
-abstract class Request with _$Request {
-  const factory Request({
-    @JsonKey(name: 'method') String? method,
-    @JsonKey(name: 'header') List<dynamic>? header,
-    @JsonKey(name: 'body') Body? body,
-    @JsonKey(name: 'url') RequestUrl? url,
-    @JsonKey(name: 'auth') Auth? auth,
-  }) = _Request;
+class Request {
+  const Request({
+    this.method,
+    this.header,
+    this.body,
+    this.url,
+    this.auth,
+  });
 
-  factory Request.fromJson(Map<String, dynamic> json) => _$RequestFromJson(json);
+  factory Request.fromJson(Map<String, dynamic> json) {
+    return Request(
+      method: json['method'] as String?,
+      header: json['header'] as List<dynamic>?,
+      body: json['body'] != null ? Body.fromJson(json['body'] as Map<String, dynamic>) : null,
+      url: json['url'] != null ? RequestUrl.fromJson(json['url'] as Map<String, dynamic>) : null,
+      auth: json['auth'] != null ? Auth.fromJson(json['auth'] as Map<String, dynamic>) : null,
+    );
+  }
+  final String? method;
+  final List<dynamic>? header;
+  final Body? body;
+  final RequestUrl? url;
+  final Auth? auth;
+
+  Map<String, dynamic> toJson() => {
+        'method': method,
+        'header': header,
+        'body': body?.toJson(),
+        'url': url?.toJson(),
+        'auth': auth?.toJson(),
+      };
 }
 
-@freezed
-abstract class Auth with _$Auth {
-  const factory Auth({
-    @JsonKey(name: 'type') String? type,
-    @JsonKey(name: 'bearer') List<Bearer>? bearer,
-  }) = _Auth;
+class Auth {
+  const Auth({this.type, this.bearer});
 
-  factory Auth.fromJson(Map<String, dynamic> json) => _$AuthFromJson(json);
+  factory Auth.fromJson(Map<String, dynamic> json) {
+    return Auth(
+      type: json['type'] as String?,
+      bearer: (json['bearer'] as List<dynamic>?)?.map((e) => Bearer.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+  final String? type;
+  final List<Bearer>? bearer;
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'bearer': bearer?.map((e) => e.toJson()).toList(),
+      };
 }
 
-@freezed
-abstract class Bearer with _$Bearer {
-  const factory Bearer({
-    @JsonKey(name: 'key') String? key,
-    @JsonKey(name: 'value') String? value,
-    @JsonKey(name: 'type') Type? type,
-    @JsonKey(name: 'description') String? description,
-  }) = _Bearer;
+class Bearer {
+  const Bearer({
+    this.key,
+    this.value,
+    this.type,
+    this.description,
+  });
 
-  factory Bearer.fromJson(Map<String, dynamic> json) => _$BearerFromJson(json);
+  factory Bearer.fromJson(Map<String, dynamic> json) {
+    return Bearer(
+      key: json['key'] as String?,
+      value: json['value'] as String?,
+      type: json['type'] != null ? typeValues.map[json['type'] as String] : null,
+      description: json['description'] as String?,
+    );
+  }
+  final String? key;
+  final String? value;
+  final Type? type;
+  final String? description;
+
+  Map<String, dynamic> toJson() => {
+        'key': key,
+        'value': value,
+        'type': type != null ? typeValues.reverse[type] : null,
+        'description': description,
+      };
 }
 
-enum Type {
-  @JsonValue('string')
-  STRING,
-  @JsonValue('text')
-  TEXT
+enum Type { STRING, TEXT }
+
+final typeValues = EnumValues({
+  'string': Type.STRING,
+  'text': Type.TEXT,
+});
+
+class Body {
+  const Body({
+    this.mode,
+    this.formdata,
+    this.urlencoded,
+    this.raw,
+    this.options,
+  });
+
+  factory Body.fromJson(Map<String, dynamic> json) {
+    return Body(
+      mode: json['mode'] as String?,
+      formdata: (json['formdata'] as List<dynamic>?)?.map((e) => Formdatum.fromJson(e as Map<String, dynamic>)).toList(),
+      urlencoded: json['urlencoded'] as List<dynamic>?,
+      raw: json['raw'] as String?,
+      options: json['options'] != null ? Options.fromJson(json['options'] as Map<String, dynamic>) : null,
+    );
+  }
+  final String? mode;
+  final List<Formdatum>? formdata;
+  final List<dynamic>? urlencoded;
+  final String? raw;
+  final Options? options;
+
+  Map<String, dynamic> toJson() => {
+        'mode': mode,
+        'formdata': formdata?.map((e) => e.toJson()).toList(),
+        'urlencoded': urlencoded,
+        'raw': raw,
+        'options': options?.toJson(),
+      };
 }
 
-final typeValues = EnumValues({'string': Type.STRING, 'text': Type.TEXT});
+class Formdatum {
+  const Formdatum({
+    this.key,
+    this.value,
+    this.type,
+    this.description,
+    this.disabled,
+  });
 
-@freezed
-abstract class Body with _$Body {
-  const factory Body({
-    @JsonKey(name: 'mode') String? mode,
-    @JsonKey(name: 'formdata') List<Formdatum>? formdata,
-    @JsonKey(name: 'urlencoded') List<dynamic>? urlencoded,
-    @JsonKey(name: 'raw') String? raw,
-    @JsonKey(name: 'options') Options? options,
-  }) = _Body;
+  factory Formdatum.fromJson(Map<String, dynamic> json) {
+    return Formdatum(
+      key: json['key'] as String?,
+      value: json['value'] as String?,
+      type: json['type'] as String?,
+      description: json['description'] as String?,
+      disabled: json['disabled'] as bool?,
+    );
+  }
+  final String? key;
+  final String? value;
+  final String? type;
+  final String? description;
+  final bool? disabled;
 
-  factory Body.fromJson(Map<String, dynamic> json) => _$BodyFromJson(json);
+  Map<String, dynamic> toJson() => {
+        'key': key,
+        'value': value,
+        'type': type,
+        'description': description,
+        'disabled': disabled,
+      };
 }
 
-@freezed
-abstract class Formdatum with _$Formdatum {
-  const factory Formdatum({
-    @JsonKey(name: 'key') String? key,
-    @JsonKey(name: 'value') String? value,
-    @JsonKey(name: 'type') String? type,
-    @JsonKey(name: 'description') String? description,
-    @JsonKey(name: 'disabled') bool? disabled,
-  }) = _Formdatum;
+class Options {
+  const Options({this.raw});
 
-  factory Formdatum.fromJson(Map<String, dynamic> json) => _$FormdatumFromJson(json);
+  factory Options.fromJson(Map<String, dynamic> json) {
+    return Options(
+      raw: json['raw'] != null ? Raw.fromJson(json['raw'] as Map<String, dynamic>) : null,
+    );
+  }
+  final Raw? raw;
+
+  Map<String, dynamic> toJson() => {
+        'raw': raw?.toJson(),
+      };
 }
 
-@freezed
-abstract class Options with _$Options {
-  const factory Options({
-    @JsonKey(name: 'raw') Raw? raw,
-  }) = _Options;
+class Raw {
+  const Raw({this.language});
 
-  factory Options.fromJson(Map<String, dynamic> json) => _$OptionsFromJson(json);
+  factory Raw.fromJson(Map<String, dynamic> json) {
+    return Raw(
+      language: json['language'] as String?,
+    );
+  }
+  final String? language;
+
+  Map<String, dynamic> toJson() => {
+        'language': language,
+      };
 }
 
-@freezed
-abstract class Raw with _$Raw {
-  const factory Raw({
-    @JsonKey(name: 'language') String? language,
-  }) = _Raw;
+class RequestUrl {
+  const RequestUrl({
+    this.raw,
+    this.host,
+    this.path,
+    this.query,
+  });
 
-  factory Raw.fromJson(Map<String, dynamic> json) => _$RawFromJson(json);
+  factory RequestUrl.fromJson(Map<String, dynamic> json) {
+    return RequestUrl(
+      raw: json['raw'] as String?,
+      host: (json['host'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      path: (json['path'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      query: (json['query'] as List<dynamic>?)?.map((e) => Header.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+  final String? raw;
+  final List<String>? host;
+  final List<String>? path;
+  final List<Header>? query;
+
+  Map<String, dynamic> toJson() => {
+        'raw': raw,
+        'host': host,
+        'path': path,
+        'query': query?.map((e) => e.toJson()).toList(),
+      };
 }
 
-@freezed
-abstract class RequestUrl with _$RequestUrl {
-  const factory RequestUrl({
-    @JsonKey(name: 'raw') String? raw,
-    @JsonKey(name: 'host') List<String>? host,
-    @JsonKey(name: 'path') List<String>? path,
-    @JsonKey(name: 'query') List<Header>? query,
-  }) = _RequestUrl;
+class Header {
+  const Header({this.key, this.value});
 
-  factory RequestUrl.fromJson(Map<String, dynamic> json) => _$RequestUrlFromJson(json);
+  factory Header.fromJson(Map<String, dynamic> json) {
+    return Header(
+      key: json['key'] as String?,
+      value: json['value'] as String?,
+    );
+  }
+  final String? key;
+  final String? value;
+
+  Map<String, dynamic> toJson() => {
+        'key': key,
+        'value': value,
+      };
 }
 
-@freezed
-abstract class Header with _$Header {
-  const factory Header({
-    @JsonKey(name: 'key') String? key,
-    @JsonKey(name: 'value') String? value,
-  }) = _Header;
+class Response {
+  const Response({
+    this.name,
+    this.originalRequest,
+    this.status,
+    this.code,
+    this.postmanPreviewlanguage,
+    this.header,
+    this.cookie,
+    this.body,
+  });
 
-  factory Header.fromJson(Map<String, dynamic> json) => _$HeaderFromJson(json);
+  factory Response.fromJson(Map<String, dynamic> json) {
+    return Response(
+      name: json['name'] as String?,
+      originalRequest: json['originalRequest'] != null ? OriginalRequest.fromJson(json['originalRequest'] as Map<String, dynamic>) : null,
+      status: json['status'] as String?,
+      code: json['code'] as int?,
+      postmanPreviewlanguage: json['_postman_previewlanguage'] as String?,
+      header: (json['header'] as List<dynamic>?)?.map((e) => Header.fromJson(e as Map<String, dynamic>)).toList(),
+      cookie: json['cookie'] as List<dynamic>?,
+      body: json['body'] as String?,
+    );
+  }
+  final String? name;
+  final OriginalRequest? originalRequest;
+  final String? status;
+  final int? code;
+  final String? postmanPreviewlanguage;
+  final List<Header>? header;
+  final List<dynamic>? cookie;
+  final String? body;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'originalRequest': originalRequest?.toJson(),
+        'status': status,
+        'code': code,
+        '_postman_previewlanguage': postmanPreviewlanguage,
+        'header': header?.map((e) => e.toJson()).toList(),
+        'cookie': cookie,
+        'body': body,
+      };
 }
 
-@freezed
-abstract class Response with _$Response {
-  const factory Response({
-    @JsonKey(name: 'name') String? name,
-    @JsonKey(name: 'originalRequest') OriginalRequest? originalRequest,
-    @JsonKey(name: 'status') String? status,
-    @JsonKey(name: 'code') int? code,
-    @JsonKey(name: '_postman_previewlanguage') String? postmanPreviewlanguage,
-    @JsonKey(name: 'header') List<Header>? header,
-    @JsonKey(name: 'cookie') List<dynamic>? cookie,
-    @JsonKey(name: 'body') String? body,
-  }) = _Response;
+class OriginalRequest {
+  const OriginalRequest({
+    this.method,
+    this.header,
+    this.body,
+    this.url,
+  });
 
-  factory Response.fromJson(Map<String, dynamic> json) => _$ResponseFromJson(json);
+  factory OriginalRequest.fromJson(Map<String, dynamic> json) {
+    return OriginalRequest(
+      method: json['method'] as String?,
+      header: json['header'] as List<dynamic>?,
+      body: json['body'] != null ? Body.fromJson(json['body'] as Map<String, dynamic>) : null,
+      url: json['url'] != null ? OriginalRequestUrl.fromJson(json['url'] as Map<String, dynamic>) : null,
+    );
+  }
+  final String? method;
+  final List<dynamic>? header;
+  final Body? body;
+  final OriginalRequestUrl? url;
+
+  Map<String, dynamic> toJson() => {
+        'method': method,
+        'header': header,
+        'body': body?.toJson(),
+        'url': url?.toJson(),
+      };
 }
 
-@freezed
-abstract class OriginalRequest with _$OriginalRequest {
-  const factory OriginalRequest({
-    @JsonKey(name: 'method') String? method,
-    @JsonKey(name: 'header') List<dynamic>? header,
-    @JsonKey(name: 'body') Body? body,
-    @JsonKey(name: 'url') OriginalRequestUrl? url,
-  }) = _OriginalRequest;
+class OriginalRequestUrl {
+  const OriginalRequestUrl({
+    this.raw,
+    this.host,
+    this.path,
+    this.query,
+  });
 
-  factory OriginalRequest.fromJson(Map<String, dynamic> json) => _$OriginalRequestFromJson(json);
+  factory OriginalRequestUrl.fromJson(Map<String, dynamic> json) {
+    return OriginalRequestUrl(
+      raw: json['raw'] as String?,
+      host: (json['host'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      path: (json['path'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      query: (json['query'] as List<dynamic>?)?.map((e) => Query.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+  final String? raw;
+  final List<String>? host;
+  final List<String>? path;
+  final List<Query>? query;
+
+  Map<String, dynamic> toJson() => {
+        'raw': raw,
+        'host': host,
+        'path': path,
+        'query': query?.map((e) => e.toJson()).toList(),
+      };
 }
 
-@freezed
-abstract class OriginalRequestUrl with _$OriginalRequestUrl {
-  const factory OriginalRequestUrl({
-    @JsonKey(name: 'raw') String? raw,
-    @JsonKey(name: 'host') List<String>? host,
-    @JsonKey(name: 'path') List<String>? path,
-    @JsonKey(name: 'query') List<Query>? query,
-  }) = _OriginalRequestUrl;
+class Query {
+  const Query({this.key, this.value, this.disabled});
 
-  factory OriginalRequestUrl.fromJson(Map<String, dynamic> json) => _$OriginalRequestUrlFromJson(json);
-}
+  factory Query.fromJson(Map<String, dynamic> json) {
+    return Query(
+      key: json['key'] as String?,
+      value: json['value'] as String?,
+      disabled: json['disabled'] as bool?,
+    );
+  }
+  final String? key;
+  final String? value;
+  final bool? disabled;
 
-@freezed
-abstract class Query with _$Query {
-  const factory Query({
-    @JsonKey(name: 'key') String? key,
-    @JsonKey(name: 'value') String? value,
-    @JsonKey(name: 'disabled') bool? disabled,
-  }) = _Query;
-
-  factory Query.fromJson(Map<String, dynamic> json) => _$QueryFromJson(json);
+  Map<String, dynamic> toJson() => {
+        'key': key,
+        'value': value,
+        'disabled': disabled,
+      };
 }
 
 class EnumValues<T> {
