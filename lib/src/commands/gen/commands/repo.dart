@@ -529,9 +529,11 @@ ${fileContent.map((e) => e.replaceAll('"', "'")).join('\n')}
       File(appUrisPath).writeAsStringSync(urisContent);
     } else if (File(appUrisPath).existsSync()) {
       final fileContent = File(appUrisPath).readAsStringSync();
-      File(appUrisPath).writeAsStringSync(
-        '${fileContent.replaceAll('}', '')}\n  $urisContent\n}\n',
-      );
+      final lastClosingBracketIndex = fileContent.lastIndexOf('}');
+      if (lastClosingBracketIndex != -1) {
+        final updatedContent = '${fileContent.substring(0, lastClosingBracketIndex)}\n  $urisContent\n}\n';
+        File(appUrisPath).writeAsStringSync(updatedContent);
+      }
     }
   }
 }
