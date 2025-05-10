@@ -1,5 +1,5 @@
-class PostmanEnviourmentEntity {
-  PostmanEnviourmentEntity({
+class PostmanEnviourmentModel {
+  PostmanEnviourmentModel({
     this.id,
     this.name,
     this.values,
@@ -8,8 +8,8 @@ class PostmanEnviourmentEntity {
     this.postmanExportedUsing,
   });
 
-  factory PostmanEnviourmentEntity.fromJson(Map<String, dynamic> json) {
-    return PostmanEnviourmentEntity(
+  factory PostmanEnviourmentModel.fromJson(Map<String, dynamic> json) {
+    return PostmanEnviourmentModel(
       id: json['id'] as String?,
       name: json['name'] as String?,
       values: (json['values'] as List<dynamic>?)?.map((e) => PostmanEnviourmentRowEntity.fromJson(e as Map<String, dynamic>)).toList(),

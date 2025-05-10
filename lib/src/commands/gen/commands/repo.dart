@@ -132,36 +132,36 @@ class RepoCommand extends Command<int> {
     return true;
   }
 
-  /// Parses the Postman collection JSON into a [PostmanCollectionEntity]
+  /// Parses the Postman collection JSON into a [PostmanCollectionModel]
   /// Throws if the format is invalid
-  PostmanCollectionEntity _parseCollection(dynamic json) {
+  PostmanCollectionModel _parseCollection(dynamic json) {
     if (json is String) {
-      return PostmanCollectionEntity.fromJson(
+      return PostmanCollectionModel.fromJson(
         jsonDecode(json) as Map<String, dynamic>,
       );
     } else if (json is Map) {
-      return PostmanCollectionEntity.fromJson(json as Map<String, dynamic>);
+      return PostmanCollectionModel.fromJson(json as Map<String, dynamic>);
     }
     throw Exception('Invalid collection format');
   }
 
-  /// Parses the Postman environment JSON into a [PostmanEnviourmentEntity]
+  /// Parses the Postman environment JSON into a [PostmanEnviourmentModel]
   /// Throws if the format is invalid
-  PostmanEnviourmentEntity _parseEnvironment(dynamic json) {
+  PostmanEnviourmentModel _parseEnvironment(dynamic json) {
     if (json is String) {
-      return PostmanEnviourmentEntity.fromJson(
+      return PostmanEnviourmentModel.fromJson(
         jsonDecode(json) as Map<String, dynamic>,
       );
     } else if (json is Map) {
-      return PostmanEnviourmentEntity.fromJson(json as Map<String, dynamic>);
+      return PostmanEnviourmentModel.fromJson(json as Map<String, dynamic>);
     }
     throw Exception('Invalid environment format');
   }
 
   /// Creates the necessary directories for code generation
   void _createDirectories(
-    PostmanCollectionEntity postmanCollection,
-    PostmanEnviourmentEntity postmanEnvironment,
+    PostmanCollectionModel postmanCollection,
+    PostmanEnviourmentModel postmanEnvironment,
     bool hasValidAppUriPath,
   ) {
     /// Create lib directory
@@ -195,8 +195,8 @@ final class ApiUris {
 
   /// Processes each folder in the collection and generates repository files
   Future<void> _processCollection(
-    PostmanCollectionEntity collection,
-    PostmanEnviourmentEntity environment, {
+    PostmanCollectionModel collection,
+    PostmanEnviourmentModel environment, {
     String? alraedyAvailableAppUriPath,
   }) async {
     for (final folder in collection.folders ?? <PostmanCollectionFolderModel>[]) {
@@ -227,8 +227,8 @@ final class ApiUris {
       // ..writeln("import 'package:dartz/dartz.dart';")
       // ..writeln("import 'package:dio/dio.dart';")
       // ..writeln("import 'package:feggy/feggy.dart';")
-      // ..writeln("import '../models/${folderName}_models.dart';")
-      // ..writeln("import '../uris.dart';")
+      // ..writeln('../models/${folderName}_models.dart';")
+      // ..writeln('../uris.dart';")
       ..writeln()
       ..writeln('@immutable')
       ..writeln('final class ${folder.name?.pascalCase}Repository {')
@@ -250,7 +250,7 @@ final class ApiUris {
   Future<void> _processApiCalls(
     PostmanCollectionFolderModel folder,
     StringBuffer repoContent,
-    PostmanEnviourmentEntity environment, {
+    PostmanEnviourmentModel environment, {
     String? alraedyAvailableAppUriPath,
   }) async {
     for (final apiCall in folder.apiCallModel ?? <PostmanCollectionRequestModel>[]) {
@@ -281,8 +281,8 @@ final class ApiUris {
       final responseBody = jsonDecode(response.body ?? '{}');
 
       if (responseBody != null) {
-        modelName = '${apiCall.name?.pascalCase}Entity';
-        modelFileName = '${apiCall.name?.snakeCase}_entity.dart';
+        modelName = '${apiCall.name?.pascalCase}Model';
+        modelFileName = '${apiCall.name?.snakeCase}_model.dart';
         modelFilePath = 'lib/entities/$modelFileName';
 
         await _generateModelFile(
@@ -372,7 +372,7 @@ ${fileContent.map((e) => e.replaceAll('"', "'")).join('\n')}
     ({String name, String fileName, String filePath}) modelInfo,
     PostmanCollectionFolderModel folder,
     StringBuffer repoContent,
-    PostmanEnviourmentEntity environment, {
+    PostmanEnviourmentModel environment, {
     String? alraedyAvailableAppUriPath,
   }) {
     final methodName = apiCall.name!.camelCase;
@@ -406,31 +406,35 @@ ${fileContent.map((e) => e.replaceAll('"', "'")).join('\n')}
     }
 
     repoContent
-      ..writeln('  /*')
-      ..writeln('   @api {${request.method?.toUpperCase()} $url} $url')
-      ..writeln('   @apiName ${apiCall.name}')
-      ..writeln('   @apiGroup ${folder.name?.pascalCase}\n');
+      ..writeln('  /// @api {${request.method?.toUpperCase()} $url} $url')
+      ..writeln('  /// @apiName ${apiCall.name}')
+      ..writeln('  /// @apiGroup ${folder.name?.pascalCase}')
+      ..writeln();
 
     if (hasQueryParams || hasBody) {
       if (hasBody) {
+        final formattedRaw = request.body?.raw?.split('\n').map((line) => '  /// $line').join('\n');
+
         repoContent
-          ..writeln('   @apiBody {json} body Request payload')
-          ..writeln('   ```json')
-          ..writeln('   ${request.body?.raw}')
-          ..writeln('   ```\n');
+          ..writeln('  /// @apiBody {json} body Request payload')
+          ..writeln('  /// ```json')
+          ..writeln(formattedRaw)
+          ..writeln('  /// ```')
+          ..writeln();
       }
       if (hasQueryParams) {
         repoContent
-          ..writeln('   @apiParamExample {json} Request-Example:')
-          ..writeln('   ```json')
-          ..writeln('   ${queryParams?.entries.map((e) => '${e.key}=${e.value}').join(', ')}')
-          ..writeln('   ```\n');
+          ..writeln('  /// @apiParamExample {json} Request-Example:')
+          ..writeln('  /// ```json')
+          ..writeln('  /// ${queryParams?.entries.map((e) => '${e.key}=${e.value}').join(', ')}')
+          ..writeln('  /// ```')
+          ..writeln();
       }
     }
 
     repoContent
-      ..writeln('   @apiSuccess {${modelInfo.name.isNotEmpty ? modelInfo.name : 'void'}} response Success response')
-      ..writeln('   */');
+      ..writeln('  /// @apiSuccess {${modelInfo.name.isNotEmpty ? modelInfo.name : 'void'}} response Success response')
+      ..writeln();
     // Extract path segments
     final pathSegments = Uri.parse(url).pathSegments;
 

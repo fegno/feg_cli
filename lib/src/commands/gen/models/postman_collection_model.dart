@@ -1,8 +1,8 @@
-class PostmanCollectionEntity {
-  const PostmanCollectionEntity({this.info, this.folders});
+class PostmanCollectionModel {
+  const PostmanCollectionModel({this.info, this.folders});
 
-  factory PostmanCollectionEntity.fromJson(Map<String, dynamic> json) {
-    return PostmanCollectionEntity(
+  factory PostmanCollectionModel.fromJson(Map<String, dynamic> json) {
+    return PostmanCollectionModel(
       info: json['info'] != null ? PostmanCollectionInfoModel.fromJson(json['info'] as Map<String, dynamic>) : null,
       folders: (json['item'] as List<dynamic>?)?.map((e) => PostmanCollectionFolderModel.fromJson(e as Map<String, dynamic>)).toList(),
     );
