@@ -283,7 +283,7 @@ final class ApiUris {
       if (responseBody != null) {
         modelName = '${apiCall.name?.pascalCase}Model';
         modelFileName = '${apiCall.name?.snakeCase}_model.dart';
-        modelFilePath = 'lib/entities/$modelFileName';
+        modelFilePath = 'lib/models/$modelFileName';
 
         await _generateModelFile(
           apiCall,
@@ -311,7 +311,7 @@ final class ApiUris {
     String modelFilePath,
   ) async {
     try {
-      final modelsDir = Directory('lib/entities');
+      final modelsDir = Directory('lib/models');
       if (!modelsDir.existsSync()) {
         modelsDir.createSync();
       }
