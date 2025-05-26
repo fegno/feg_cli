@@ -12,16 +12,16 @@ class ChangeCommand extends Command<int> {
   ChangeCommand({
     required Logger logger,
   }) {
-    addSubcommand(
-      AppNameCommand(
-        logger: logger,
-      ),
-    );
-    addSubcommand(
-      PackageNameCommand(
-        logger: logger,
-      ),
-    );
+    // addSubcommand(
+    //   AppNameCommand(
+    //     logger: logger,
+    //   ),
+    // );
+    // addSubcommand(
+    //   PackageNameCommand(
+    //     logger: logger,
+    //   ),
+    // );
   }
 
   @override
