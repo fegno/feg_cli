@@ -14,7 +14,7 @@ dependencies:
   mason: ^0.1.0-dev.57
   mason_logger: ^0.2.5
   path: ^1.9.0
-  pub_updater: ^0.4.0
+  pub_updater: ^0.6.0
   #*Mono repos
   app_name_changer:
     path: packages/app_name_changer
