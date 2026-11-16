@@ -1,0 +1,35 @@
+# Blocks PRs between env branches: dev -> stg, dev -> main, stg -> main.
+# Required as status check "branch-flow-guard" by the org ruleset protect-env-branches.
+name: branch-flow-guard
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+permissions: {}
+
+jobs:
+  branch-flow-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Check source and target branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          tier() {
+            case "$1" in
+              main|master|prod|production) echo main ;;
+              stg|staging)                 echo stg ;;
+              dev|develop|development)     echo dev ;;
+              *)                           echo other ;;
+            esac
+          }
+          pair="$(tier "$HEAD_REF")->$(tier "$BASE_REF")"
+          case "$pair" in
+            "dev->stg"|"dev->main"|"stg->main")
+              echo "::error::Merging '$HEAD_REF' into '$BASE_REF' is not allowed ($pair)."
+              exit 1 ;;
+          esac
+          echo "OK: $HEAD_REF -> $BASE_REF"
