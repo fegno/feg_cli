@@ -10,7 +10,7 @@ permissions: {}
 
 jobs:
   branch-flow-guard:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 1
     steps:
       - name: Check source and target branch
